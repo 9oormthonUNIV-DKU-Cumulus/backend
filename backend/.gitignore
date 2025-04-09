@@ -1,9 +1,19 @@
+# README
 HELP.md
+
+# Gradle
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+
+# Jar
+*.jar
+*.war
+
+# Env files (DB, secret keys)
+.env
 
 ### STS ###
 .apt_generated
