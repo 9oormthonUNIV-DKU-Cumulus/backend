@@ -37,3 +37,10 @@ Spring Boot 기반 백엔드 프로젝트입니다.
 ```bash
 git clone https://github.com/9oormthonUNIV-DKU-Cumulus/backend.git
 cd backend
+
+2. IDE에서 열기 (추천: IntelliJ 또는 VS Code)
+
+3. 빌드 및 실행
+
+./gradlew bootRun
+(또는 IDE에서 직접 BackendApplication.java 실행)
