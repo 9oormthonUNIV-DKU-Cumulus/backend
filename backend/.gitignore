@@ -1,6 +1,10 @@
 # README
 HELP.md
 
+src/main/resources/application-dev.yml
+src/main/resources/application-local.yml
+.gradle/*
+
 # Gradle
 .gradle
 build/
