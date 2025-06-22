@@ -30,7 +30,11 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests( authorizationManagerRequestMatcherRegistry -> authorizationManagerRequestMatcherRegistry
-                        .requestMatchers(Constants.PERMIT_ALL_URLS.toArray(String[]::new)).permitAll()
+                        .requestMatchers(Constants.PERMIT_ALL_URLS.stream()
+                                .map(url -> new AntPathRequestMatcher(url, null))
+                                .toArray(AntPathRequestMatcher[]::new)
+                        ).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/error", null)).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
                         .anyRequest().authenticated()
                 );
