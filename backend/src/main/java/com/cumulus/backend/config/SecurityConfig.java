@@ -5,6 +5,7 @@ import com.cumulus.backend.security.filter.ExceptionFilter;
 import com.cumulus.backend.security.handler.JsonAccessDeniedHandler;
 import com.cumulus.backend.security.handler.JsonAuthenticationEntryPoint;
 import com.cumulus.backend.security.handler.LoginFailureHandler;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +13,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -28,6 +31,11 @@ public class SecurityConfig {
     private final LoginFailureHandler loginFailureHandler;
 
     @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
     protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())
@@ -36,6 +44,11 @@ public class SecurityConfig {
                         .usernameParameter("email")
                         .passwordParameter("password")
                         .failureHandler(loginFailureHandler)
+                        .successHandler((request, response, authentication) -> {
+                            response.setStatus(HttpServletResponse.SC_OK);
+                            response.setContentType("application/json");
+                            response.getWriter().write("{\"message\": \"login success\"}");
+                        })
                 )
                 .httpBasic(httpSecurityHttpBasicConfigurer -> httpSecurityHttpBasicConfigurer.disable())
                 // h2 콘솔 접근허용

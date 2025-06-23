@@ -2,6 +2,7 @@ package com.cumulus.backend.user.repository;
 
 import com.cumulus.backend.user.domain.User;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -24,12 +25,16 @@ public class UserRepository {
 
     public Optional<User> findOne(Long id){ return Optional.ofNullable(em.find(User.class, id)); }
 
-    public Optional<User> findByEmail(String email){
-        User user = em.createQuery(
-                "SELECT u FROM User u WHERE u.email = :email", User.class
-                )
-                .setParameter("email", email)
-                .getSingleResult();
-        return Optional.of(user);
+    public Optional<User> findByEmail(String email) {
+        try {
+            User user = em.createQuery(
+                            "SELECT u FROM User u WHERE u.email = :email", User.class
+                    )
+                    .setParameter("email", email)
+                    .getSingleResult();
+            return Optional.of(user);
+        } catch (NoResultException e){
+            return Optional.empty();
+        }
     }
 }

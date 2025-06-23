@@ -6,6 +6,7 @@ import com.cumulus.backend.user.domain.CustomUserDetails;
 import com.cumulus.backend.user.domain.User;
 import com.cumulus.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,6 +24,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) {
         return userRepository.findByEmail(email)
                 .map(CustomUserDetails::new)
-                .orElse(null);
+                .orElseThrow(() -> new InternalAuthenticationServiceException("NO_SUCH_USER",
+                        new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + email)));
     }
 }

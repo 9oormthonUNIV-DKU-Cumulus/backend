@@ -15,7 +15,7 @@ public enum ErrorCode {
 
     // 로그인 인증필터관련 에러
     USER_EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 이메일로 등록된 계정을 찾을 수 없습니다."),
-    INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "이메일 또는 비밀번호가 일치하지 않습니다." ),
+    INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다." ),
     AUTH_UNKNOWN_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "인증 서비스 오류입니다. 관리자에게 문의하세요."),
 
 
