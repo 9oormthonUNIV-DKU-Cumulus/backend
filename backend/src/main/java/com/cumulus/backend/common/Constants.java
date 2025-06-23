@@ -11,4 +11,7 @@ public class Constants {
             "/api/auth/login",
             "/api/auth/reissue"
     );
+
+    // jwt 인증헤더
+    public static final String AUTHORIZATION_HEADER = "Authorization";
 }
