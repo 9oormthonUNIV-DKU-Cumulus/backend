@@ -6,6 +6,7 @@ import com.cumulus.backend.security.filter.JwtFilter;
 import com.cumulus.backend.security.handler.JsonAccessDeniedHandler;
 import com.cumulus.backend.security.handler.JsonAuthenticationEntryPoint;
 import com.cumulus.backend.security.handler.LoginFailureHandler;
+import com.cumulus.backend.security.handler.LoginSuccessHandler;
 import com.cumulus.backend.security.jwt.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ public class SecurityConfig {
     private final JsonAuthenticationEntryPoint authenticationEntryPoint;
     private final JsonAccessDeniedHandler accessDeniedHandler;
     private final LoginFailureHandler loginFailureHandler;
+    private final LoginSuccessHandler loginSuccessHandler;
     private final JwtUtil jwtUtil;
 
     @Bean
@@ -47,11 +49,7 @@ public class SecurityConfig {
                         .usernameParameter("email")
                         .passwordParameter("password")
                         .failureHandler(loginFailureHandler)
-                        .successHandler((request, response, authentication) -> {
-                            response.setStatus(HttpServletResponse.SC_OK);
-                            response.setContentType("application/json");
-                            response.getWriter().write("{\"message\": \"login success\"}");
-                        })
+                        .successHandler(loginSuccessHandler)
                 )
                 .httpBasic(httpSecurityHttpBasicConfigurer -> httpSecurityHttpBasicConfigurer.disable())
                 // h2 콘솔 접근허용
