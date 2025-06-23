@@ -1,9 +1,7 @@
 package com.cumulus.backend.security.handler;
 
-import com.cumulus.backend.common.ApiResponse;
 import com.cumulus.backend.exception.ErrorCode;
-import com.cumulus.backend.exception.ErrorResponder;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.cumulus.backend.exception.ApiResponder;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,12 +18,12 @@ import java.io.IOException;
 @Slf4j
 public class JsonAccessDeniedHandler implements AccessDeniedHandler {
 
-    private final ErrorResponder errorResponder;
+    private final ApiResponder apiResponder;
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response,
                        AccessDeniedException accessDeniedException) throws IOException, ServletException {
         log.warn("JsonAccessDeniedHandler - AccessDeniedException : {}", accessDeniedException.getMessage());
-        errorResponder.sendError(response, ErrorCode.ACCESS_DENIED, accessDeniedException);
+        apiResponder.sendError(response, ErrorCode.ACCESS_DENIED, accessDeniedException);
     }
 }

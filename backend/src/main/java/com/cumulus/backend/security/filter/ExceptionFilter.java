@@ -2,7 +2,7 @@ package com.cumulus.backend.security.filter;
 
 import com.cumulus.backend.exception.CustomException;
 import com.cumulus.backend.exception.ErrorCode;
-import com.cumulus.backend.exception.ErrorResponder;
+import com.cumulus.backend.exception.ApiResponder;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,7 +21,7 @@ import java.nio.file.AccessDeniedException;
 @Slf4j
 public class ExceptionFilter extends OncePerRequestFilter {
 
-    private final ErrorResponder errorResponder;
+    private final ApiResponder apiResponder;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -31,19 +31,19 @@ public class ExceptionFilter extends OncePerRequestFilter {
         } catch (AuthenticationException ex) {
             // Spring Security 내부 Authentication 실패
             log.warn("ExceptionFilter - AuthenticationException : {}", ex.getMessage());
-            errorResponder.sendError(response, ErrorCode.NOT_LOGIN_USER, ex);
+            apiResponder.sendError(response, ErrorCode.NOT_LOGIN_USER, ex);
         } catch (AccessDeniedException ex) {
             // Spring Security 내부 인가 실패
             log.warn("ExceptionFilter - AccessDeniedException : {}", ex.getMessage());
-            errorResponder.sendError(response, ErrorCode.ACCESS_DENIED, ex);
+            apiResponder.sendError(response, ErrorCode.ACCESS_DENIED, ex);
         } catch (CustomException ex) {
             // 커스텀 예외
             log.warn("ExceptionFilter - CustomExcetpion : {}", ex.getMessage());
-            errorResponder.sendError(response, ex.getErrorCode(), ex);
+            apiResponder.sendError(response, ex.getErrorCode(), ex);
         } catch (Exception ex) {
             // 기타 모든 예외
             log.warn("ExceptionFilter - Unexpected Exception : {}", ex.getMessage());
-            errorResponder.sendError(response, ErrorCode.INTERNAL_SERVER_ERROR, ex);
+            apiResponder.sendError(response, ErrorCode.INTERNAL_SERVER_ERROR, ex);
         }
     }
 }

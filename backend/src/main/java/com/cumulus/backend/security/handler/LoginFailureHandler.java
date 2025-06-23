@@ -1,7 +1,7 @@
 package com.cumulus.backend.security.handler;
 
 import com.cumulus.backend.exception.ErrorCode;
-import com.cumulus.backend.exception.ErrorResponder;
+import com.cumulus.backend.exception.ApiResponder;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,7 +20,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Slf4j
 public class LoginFailureHandler implements AuthenticationFailureHandler {
-    private final ErrorResponder errorResponder;
+    private final ApiResponder apiResponder;
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request,
@@ -29,22 +29,22 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
         if (exception instanceof InternalAuthenticationServiceException &&
                 exception.getCause() instanceof UsernameNotFoundException ) {
             log.warn("LoginFailureHandler - USER_EMAIL_NOT_FOUND");
-            errorResponder.sendError(response, ErrorCode.USER_EMAIL_NOT_FOUND, exception.getCause());
+            apiResponder.sendError(response, ErrorCode.USER_EMAIL_NOT_FOUND, exception.getCause());
             return;
         }
 
         if (exception instanceof UsernameNotFoundException) {
-            errorResponder.sendError(response, ErrorCode.USER_EMAIL_NOT_FOUND, exception);
+            apiResponder.sendError(response, ErrorCode.USER_EMAIL_NOT_FOUND, exception);
             return;
         }
 
         if (exception instanceof BadCredentialsException) {
             log.warn("LoginFailureHandler - BadCredentialsException: {}", exception.getMessage());
-            errorResponder.sendError(response, ErrorCode.INVALID_PASSWORD, exception);
+            apiResponder.sendError(response, ErrorCode.INVALID_PASSWORD, exception);
             return;
         }
 
         log.warn("LoginFailureHandler - Unknown Authentication Error: {}", exception.getMessage());
-        errorResponder.sendError(response, ErrorCode.AUTH_UNKNOWN_ERROR, exception);
+        apiResponder.sendError(response, ErrorCode.AUTH_UNKNOWN_ERROR, exception);
     }
 }

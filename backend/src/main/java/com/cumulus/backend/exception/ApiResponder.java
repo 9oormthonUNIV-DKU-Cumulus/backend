@@ -5,17 +5,26 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class ErrorResponder {
+public class ApiResponder {
     private final ObjectMapper objectMapper;
 
-    public void sendError(HttpServletResponse response, ErrorCode errorCode) throws IOException {
-        sendError(response, errorCode, null); // 메시지 없이 기본 호출 가능
+    public void sendSuccess(HttpServletResponse response, Object data) throws IOException {
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        ApiResponse<Object> successResponse = ApiResponse.success(data);
+        try {
+            response.getWriter().write(objectMapper.writeValueAsString(successResponse));
+        } catch (IOException e) {
+            throw new RuntimeException("JSON 직렬화 실패", e);
+        }
     }
 
     public void sendError(HttpServletResponse response, ErrorCode errorCode, Throwable cause) throws IOException {
