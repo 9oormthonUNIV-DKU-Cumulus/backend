@@ -2,9 +2,11 @@ package com.cumulus.backend.config;
 
 import com.cumulus.backend.common.Constants;
 import com.cumulus.backend.security.filter.ExceptionFilter;
+import com.cumulus.backend.security.filter.JwtFilter;
 import com.cumulus.backend.security.handler.JsonAccessDeniedHandler;
 import com.cumulus.backend.security.handler.JsonAuthenticationEntryPoint;
 import com.cumulus.backend.security.handler.LoginFailureHandler;
+import com.cumulus.backend.security.jwt.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -29,6 +31,7 @@ public class SecurityConfig {
     private final JsonAuthenticationEntryPoint authenticationEntryPoint;
     private final JsonAccessDeniedHandler accessDeniedHandler;
     private final LoginFailureHandler loginFailureHandler;
+    private final JwtUtil jwtUtil;
 
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -73,7 +76,9 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
 
-                .addFilterBefore(exceptionFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(exceptionFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
+        ;
 
         return http.build();
     }
