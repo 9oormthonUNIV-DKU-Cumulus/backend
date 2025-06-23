@@ -1,9 +1,10 @@
 package com.cumulus.backend.config;
 
 import com.cumulus.backend.common.Constants;
-import com.cumulus.backend.exception.ExceptionFilter;
-import com.cumulus.backend.exception.JsonAccessDeniedHandler;
-import com.cumulus.backend.exception.JsonAuthenticationEntryPoint;
+import com.cumulus.backend.security.filter.ExceptionFilter;
+import com.cumulus.backend.security.handler.JsonAccessDeniedHandler;
+import com.cumulus.backend.security.handler.JsonAuthenticationEntryPoint;
+import com.cumulus.backend.security.handler.LoginFailureHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,12 +25,18 @@ public class SecurityConfig {
     private final ExceptionFilter exceptionFilter;
     private final JsonAuthenticationEntryPoint authenticationEntryPoint;
     private final JsonAccessDeniedHandler accessDeniedHandler;
+    private final LoginFailureHandler loginFailureHandler;
 
     @Bean
     protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())
-                .formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer.disable())
+                .formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer
+                        .loginProcessingUrl("/api/auth/login")
+                        .usernameParameter("email")
+                        .passwordParameter("password")
+                        .failureHandler(loginFailureHandler)
+                )
                 .httpBasic(httpSecurityHttpBasicConfigurer -> httpSecurityHttpBasicConfigurer.disable())
                 // h2 콘솔 접근허용
                 .headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer

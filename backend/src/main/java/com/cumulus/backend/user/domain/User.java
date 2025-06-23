@@ -36,6 +36,9 @@ public class User {
     @Column(nullable = false)
     private String password;    // 암호화된 비밀번호값
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     private String major;
 
     private String phoneNumber;

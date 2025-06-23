@@ -1,6 +1,8 @@
-package com.cumulus.backend.exception;
+package com.cumulus.backend.security.handler;
 
 import com.cumulus.backend.common.ApiResponse;
+import com.cumulus.backend.exception.ErrorCode;
+import com.cumulus.backend.exception.ErrorResponder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
