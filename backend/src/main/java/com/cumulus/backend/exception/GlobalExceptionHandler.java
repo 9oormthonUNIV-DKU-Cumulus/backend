@@ -4,6 +4,7 @@ import com.cumulus.backend.common.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -17,6 +18,18 @@ public class GlobalExceptionHandler {
                 .status(customException.getErrorCode().getStatus())
                 .body(ApiResponse.fail(null, customException.getErrorCode().name(),
                         customException.getErrorCode().getMessage() ));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiResponse> handleValidationException(MethodArgumentNotValidException validException) {
+        String errorMessage = validException.getBindingResult().getFieldErrors().stream()
+                .map(error -> "[field] "+error.getField() + " - " + error.getDefaultMessage())
+                .findFirst()
+                .orElse("유효성 검증 실패");
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ApiResponse.fail(null, "VALIDATION_ERROR", errorMessage));
     }
 
     @ExceptionHandler(Exception.class)
