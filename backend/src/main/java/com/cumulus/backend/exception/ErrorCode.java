@@ -26,6 +26,8 @@ public enum ErrorCode {
     TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다. - 만료된 토큰"),
     TOKEN_PARSING_FAILED(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다. - 파싱실패"),
 
+    // 회원가입 처리 관련 에러
+    EMAIL_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "이미 가입한 유저 이메일입니다."),
 
 
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버내부 문제가 발생했습니다." ),
