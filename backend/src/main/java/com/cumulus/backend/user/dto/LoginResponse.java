@@ -1,4 +1,4 @@
-package com.cumulus.backend.user.domain;
+package com.cumulus.backend.user.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

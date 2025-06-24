@@ -31,7 +31,7 @@ public class ExceptionFilter extends OncePerRequestFilter {
         } catch (AuthenticationException ex) {
             // Spring Security 내부 Authentication 실패
             log.warn("ExceptionFilter - AuthenticationException : {}", ex.getMessage());
-            apiResponder.sendError(response, ErrorCode.NOT_LOGIN_USER, ex);
+            apiResponder.sendError(response, ErrorCode.ACCESS_TOKEN_MISSING, ex);
         } catch (AccessDeniedException ex) {
             // Spring Security 내부 인가 실패
             log.warn("ExceptionFilter - AccessDeniedException : {}", ex.getMessage());
