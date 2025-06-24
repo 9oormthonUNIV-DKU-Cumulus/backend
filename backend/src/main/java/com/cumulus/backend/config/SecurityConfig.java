@@ -59,19 +59,17 @@ public class SecurityConfig {
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .exceptionHandling( exception -> exception
-                        .authenticationEntryPoint(authenticationEntryPoint)
-                        .accessDeniedHandler(accessDeniedHandler)
-                )
 
                 .authorizeHttpRequests( authorizationManagerRequestMatcherRegistry -> authorizationManagerRequestMatcherRegistry
                         .requestMatchers(Constants.PERMIT_ALL_URLS.stream()
-                                .map(url -> new AntPathRequestMatcher(url, null))
+                                .map(url -> new AntPathRequestMatcher(url))
                                 .toArray(AntPathRequestMatcher[]::new)
                         ).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/error", null)).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
                         .anyRequest().authenticated()
+                )
+                .exceptionHandling( exception -> exception
+                        .authenticationEntryPoint(authenticationEntryPoint)
+                        .accessDeniedHandler(accessDeniedHandler)
                 )
 
                 .addFilterBefore(exceptionFilter, UsernamePasswordAuthenticationFilter.class)

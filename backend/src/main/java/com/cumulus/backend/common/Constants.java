@@ -13,7 +13,12 @@ public class Constants {
             "/api/auth/email-code/send",
             "/api/auth/email-code/verify",
             "/api/auth/login",
-            "/api/auth/reissue"
+            "/api/auth/reissue",
+            "/h2-console",
+            "/h2-console/",
+            "/h2-console/**",
+            "/favicon.ico",
+            "/error"
     );
 
     // jwt 인증헤더

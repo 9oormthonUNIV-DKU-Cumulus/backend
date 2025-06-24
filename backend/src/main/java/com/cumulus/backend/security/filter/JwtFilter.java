@@ -1,5 +1,6 @@
 package com.cumulus.backend.security.filter;
 
+import com.cumulus.backend.common.Constants;
 import com.cumulus.backend.security.jwt.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -21,9 +22,20 @@ import java.io.IOException;
 public class JwtFilter extends GenericFilterBean {
     private final JwtUtil jwtUtil;
 
+    private boolean isPermitAll(String uri) {
+        return Constants.PERMIT_ALL_URLS.stream().anyMatch(uri::startsWith);
+    }
+
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
+
+        // permitAll 경로에 대해서는 jwtfilter를 수행하지 않음( AuthorizationFilter보다 선행 )
+        String uri = httpServletRequest.getRequestURI();
+        if (isPermitAll(uri)) {
+            filterChain.doFilter(servletRequest, servletResponse);
+            return;
+        }
 
         String jwtToken = jwtUtil.resolveToken(httpServletRequest);
         String requestURI = httpServletRequest.getRequestURI();
