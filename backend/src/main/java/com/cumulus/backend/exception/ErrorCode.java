@@ -30,6 +30,7 @@ public enum ErrorCode {
     EMAIL_DUPLICATE(HttpStatus.BAD_REQUEST, "이미 가입된 이메일입니다."),
     EMAIL_VERIFICATION_CODE_INVALID(HttpStatus.BAD_REQUEST, "이메일 인증 코드가 일치하지 않습니다."),
     EMAIL_VERIFICATION_CODE_EXPIRED(HttpStatus.BAD_REQUEST, "인증 코드가 만료되었습니다."),
+    EMAIL_NOT_VERIFIED(HttpStatus.BAD_REQUEST, "이메일코드 인증이 완료되지 않았습니다." ),
 
 
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버내부 문제가 발생했습니다." )
