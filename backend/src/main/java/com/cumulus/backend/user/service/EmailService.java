@@ -1,5 +1,7 @@
 package com.cumulus.backend.user.service;
 
+import com.cumulus.backend.exception.CustomException;
+import com.cumulus.backend.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -25,6 +27,19 @@ public class EmailService {
         message.setText("인증 코드: " + code + "\n5분 이내에 입력해주세요.");
 
         mailSender.send(message);
+    }
+
+    public boolean verifyCode(String email, String code){
+        String savedCode = redisTemplate.opsForValue().get("email:" + email);
+        if (savedCode == null) { // TTL이 끝났거나, 인증코드를 요청하지 않은 경우
+            throw new CustomException(ErrorCode.EMAIL_VERIFICATION_CODE_EXPIRED);
+        }
+
+        if (!savedCode.equals(code)) {
+            throw new CustomException(ErrorCode.EMAIL_VERIFICATION_CODE_INVALID);
+        }
+
+        return true;
     }
 
     private String generateRandomCode() {
