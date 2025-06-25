@@ -62,4 +62,14 @@ public class SignUpService {
         }
         log.info("[REDIS/SIGNUP] 유저 인증여부토큰({}) 유효한 상태로 확인", key);
     }
+
+    public void logout(Long userId){
+        try {
+            redisTemplate.delete("refreshToken:" + userId);
+            log.info("[LOGOUT] userId={} - RefreshToken 삭제 완료", userId);
+        } catch (Exception e) {
+            log.error("[LOGOUT] Redis 삭제 실패", e);
+            throw new CustomException(ErrorCode.REDIS_DELETE_FAIL);
+        }
+    }
 }

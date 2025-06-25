@@ -8,7 +8,9 @@ import com.cumulus.backend.user.domain.User;
 import com.cumulus.backend.user.dto.LoginResponse;
 import com.cumulus.backend.user.dto.ReissueRequest;
 import com.cumulus.backend.user.repository.UserRepository;
+import com.cumulus.backend.user.service.SignUpService;
 import com.cumulus.backend.user.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +35,7 @@ public class AuthController {
     private final JwtUtil jwtUtil;
     private final StringRedisTemplate redisTemplate;
     private final UserService userService;
+    private final SignUpService signUpService;
 
     @PostMapping("/reissue")
     public ResponseEntity<ApiResponse<?>> reissueToken(@RequestBody @Valid ReissueRequest reissueRequest){
@@ -77,5 +80,11 @@ public class AuthController {
         return ResponseEntity.ok(ApiResponse.success(new LoginResponse(newAccessToken, newRefreshToken)));
     }
 
-    @PostMapping("/reissue")
+    @PostMapping("/logout")
+    public ResponseEntity<ApiResponse<?>> logout(HttpServletRequest request){
+        String token = jwtUtil.resolveToken(request);
+        Long userId = jwtUtil.extractUserId(token, false);
+        signUpService.logout(userId);
+        return ResponseEntity.ok(ApiResponse.success(null));
+    }
 }
