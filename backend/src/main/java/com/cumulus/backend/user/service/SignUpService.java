@@ -2,6 +2,7 @@ package com.cumulus.backend.user.service;
 
 import com.cumulus.backend.exception.CustomException;
 import com.cumulus.backend.exception.ErrorCode;
+import com.cumulus.backend.user.domain.Role;
 import com.cumulus.backend.user.domain.User;
 import com.cumulus.backend.user.dto.SignUpRequest;
 import com.cumulus.backend.user.repository.UserRepository;
@@ -33,6 +34,7 @@ public class SignUpService {
                 .userName(request.getUserName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .role(Role.USER)
                 .major(request.getMajor())
                 .phoneNumber(request.getPhoneNumber())
                 .build();

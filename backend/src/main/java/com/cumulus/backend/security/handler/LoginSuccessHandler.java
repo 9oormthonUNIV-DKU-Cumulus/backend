@@ -36,10 +36,11 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
-        
         // 인증성공한 인증객체로부터 userId, authorities 추출
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+
         Long userId = userDetails.getId();
+        log.info("[LOGIN] 유저{} - 로그인 성공", userId);
 
         List<String> authorities = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -51,6 +52,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         try {
             redisTemplate.opsForValue().set("refreshToken:"+userId, refreshToken,
                     Duration.ofSeconds(jwtUtil.getRefreshTokenValidityInSeconds()));
+            log.info("[REDIS] 유저{} - refreshToken 저장 완료 (key=refreshToken:{})", userId, userId);
         } catch (Exception e){
             log.error("Redis에 RefreshToken 저장 실패: {}", e.getMessage());
             throw new CustomException(ErrorCode.REDIS_SAVE_FAIL);
