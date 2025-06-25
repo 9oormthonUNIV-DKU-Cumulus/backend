@@ -18,7 +18,8 @@ public class Constants {
             "/h2-console/",
             "/h2-console/**",
             "/favicon.ico",
-            "/error"
+            "/error",
+            "/test"
     );
 
     // jwt 인증헤더
