@@ -8,6 +8,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,11 +42,8 @@ public class JwtUtil {
     private long accessTokenValidityInSeconds;
 
     @Value("${jwt.refresh-token-validity-in-seconds}")
+    @Getter
     private long refreshTokenValidityInSeconds;
-
-    public long getRefreshTokenValidityInSeconds() {
-        return refreshTokenValidityInSeconds;
-    }
 
     // 서명키
     private Key accessKey;
