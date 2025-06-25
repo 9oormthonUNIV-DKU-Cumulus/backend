@@ -41,9 +41,9 @@ public class ApiResponder {
 
         // 예외 정보 로그 출력
         if (cause != null) {
-            log.error("[ERROR RESPONSER] {} - {}", errorCode.name(), errorCode.getMessage(), cause);
+            log.error("[ERROR - APIRESPONSER] {} - {}", errorCode.name(), errorCode.getMessage(), cause);
         } else {
-            log.error("[ERROR RESPONSER] {} - {}", errorCode.name(), errorCode.getMessage());
+            log.error("[ERROR - APIRESPONSER] {} - {}", errorCode.name(), errorCode.getMessage());
         }
     }
 

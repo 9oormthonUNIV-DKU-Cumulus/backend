@@ -46,7 +46,7 @@ public class SignUpService {
     // 회원가입 정보의 유효성 확인
     private void validateSignUpRequest(SignUpRequest request){
         if (userRepository.existsByEmail(request.getEmail())) {
-            log.info("[SIGNUP] 유저 {} - 중복가입시도, 이미 존재하는 유저 이메일", request.getEmail());
+            log.error("[SIGNUP] 유저 {} - 중복가입시도, 이미 존재하는 유저 이메일", request.getEmail());
             throw new CustomException(ErrorCode.EMAIL_DUPLICATE);
         }
         log.info("[SIGNUP] 유저 {} - 가입정보 유효성 확인통과", request.getEmail());
@@ -57,7 +57,7 @@ public class SignUpService {
     private void validateEmailAuthenticated(String key) {
         String verified = redisTemplate.opsForValue().get(key);
         if (!"true".equals(verified)) {
-            log.info("[REDIS/SIGNUP] 유저 {} - 아직 인증처리를 진행하지 않음", key);
+            log.error("[REDIS/SIGNUP] 유저 {} - 아직 인증처리를 진행하지 않음", key);
             throw new CustomException(ErrorCode.EMAIL_NOT_VERIFIED);
         }
         log.info("[REDIS/SIGNUP] 유저 인증여부토큰({}) 유효한 상태로 확인", key);

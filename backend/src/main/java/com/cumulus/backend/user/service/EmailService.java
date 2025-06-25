@@ -41,7 +41,7 @@ public class EmailService {
         }
 
         if (!savedCode.equals(code)) { // 인증코드가 일치하지 않음
-            log.warn("[EMAIL] 유저 {} - 인증코드 불일치. 입력값: {}, 저장값: {}", email, code, savedCode);
+            log.error("[EMAIL] 유저 {} - 인증코드 불일치. 입력값: {}, 저장값: {}", email, code, savedCode);
             throw new CustomException(ErrorCode.EMAIL_VERIFICATION_CODE_INVALID);
         }
 
