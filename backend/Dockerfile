@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Gradle 캐시 활용을 위해 먼저 복사
 COPY gradle gradle
-COPY gradlew .
+COPY gradlew ./gradlew
 COPY build.gradle settings.gradle ./
 RUN chmod +x ./gradlew
 
