@@ -28,9 +28,6 @@ jobs:
           echo "${{ secrets.APPLICATION_YML }}" > ./backend/src/main/resources/application.yml
           echo "${{ secrets.APPLICATION_DEV_YML }}" > ./backend/src/main/resources/application-dev.yml
 
-      - name: 디버깅용 - context 내부 파일 확인
-        run: ls -al ./backend
-
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
