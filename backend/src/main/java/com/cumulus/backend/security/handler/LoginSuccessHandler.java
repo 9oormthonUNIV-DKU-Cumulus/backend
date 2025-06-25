@@ -8,12 +8,14 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,6 +25,8 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     private final JwtUtil jwtUtil;
     private final ApiResponder apiResponder;
+
+    private final StringRedisTemplate redisTemplate;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -39,6 +43,8 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
         String accessToken = jwtUtil.createAccessToken(userId, authorities);
         String refreshToken = jwtUtil.createRefreshToken(userId);
+        redisTemplate.opsForValue().set("refreshToken:"+userId, refreshToken,
+                Duration.ofSeconds(jwtUtil.getRefreshTokenValidityInSeconds()));
 
         LoginResponse loginResponse = new LoginResponse(accessToken, refreshToken);
         apiResponder.sendSuccess(response, loginResponse);
