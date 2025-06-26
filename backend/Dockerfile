@@ -3,11 +3,11 @@ FROM eclipse-temurin:17-jdk AS builder
 WORKDIR /app
 
 # Gradle 캐시 활용을 위해 먼저 복사
-COPY gradle gradle
-COPY gradlew ./gradlew
+COPY backend/gradle gradle
+COPY backend/gradlew ./gradlew
 RUN chmod +x ./gradlew
 RUN ls -l ./gradlew
-COPY build.gradle settings.gradle ./
+COPY backend/build.gradle backend/settings.gradle ./
 
 # 의존성 먼저 받아오기 (캐시를 위해)
 RUN ./gradlew dependencies --no-daemon
