@@ -6,7 +6,6 @@ WORKDIR /app
 COPY gradle gradle
 COPY gradlew ./gradlew
 RUN chmod +x ./gradlew
-RUN ls -l ./gradlew
 COPY build.gradle settings.gradle ./
 
 # 의존성 먼저 받아오기 (캐시를 위해)
