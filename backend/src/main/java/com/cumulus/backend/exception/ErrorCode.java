@@ -33,6 +33,7 @@ public enum ErrorCode {
     MISMATCHED_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "저장된 RefreshToken 과 일치하지 않습니다."),
 
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당유저를 찾을 수 없습니다."),
+    CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 카테고리를 찾을 수 없습니다."),
 
     // 회원가입 처리 관련 에러
     EMAIL_DUPLICATE(HttpStatus.BAD_REQUEST, "이미 가입된 이메일입니다."),
