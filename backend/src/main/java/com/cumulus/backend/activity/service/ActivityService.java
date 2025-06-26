@@ -2,6 +2,7 @@ package com.cumulus.backend.activity.service;
 
 import com.cumulus.backend.activity.domain.Activity;
 import com.cumulus.backend.activity.dto.ActivityCreateDto;
+import com.cumulus.backend.activity.dto.ActivityUpdateDto;
 import com.cumulus.backend.activity.repository.ActivityRepository;
 import com.cumulus.backend.club.domain.Club;
 import com.cumulus.backend.club.repository.ClubRepository;
@@ -29,6 +30,7 @@ public class ActivityService {
     private final UserRepository userRepository;
     private final ClubRepository clubRepository;
 
+    @Transactional
     public Activity createActivity(ActivityCreateDto activityDto, Long userId) {
         Category category = Category.fromId(activityDto.getCategoryId());
         LocalDateTime createdAt = LocalDateTime.now();
@@ -53,12 +55,32 @@ public class ActivityService {
             builder
                     .club(club)
                     .isPrivate(true); // 동아리 모임 비공개처리
-
         }
 
         Activity savedActivity = activityRepository.save(builder.build());
         log.info("activity:{} - 새 모임이 정상적으로 등록되었습니다.", savedActivity.getId());
 
         return savedActivity ;
+    }
+
+    @Transactional
+    public void updateActivity(Long activityId, ActivityUpdateDto activityDto, Long userId) {
+        Activity activity = activityRepository.findOne(activityId)
+                .orElseThrow(()-> new CustomException(ErrorCode.ACTIVITY_NOT_FOUND));
+
+        // 주최자 본인인지 확인
+        if(!activity.getHostingUser().getId().equals(userId)){
+            log.error("모임수정권한 없음 - 모임주최자:{}, 수정접근자:{}",activity.getHostingUser().getId(),userId);
+            throw new CustomException(ErrorCode.NO_PERMISSION);
+        }
+
+        if( activityDto.getTitle() != null ) activity.setTitle( activityDto.getTitle() );
+        if( activityDto.getCategoryId() != null ) activity.setCategory( Category.fromId(activityDto.getCategoryId()) );
+        if( activityDto.getDescription() != null ) activity.setDescription( activityDto.getDescription() );
+        if( activityDto.getMeetingDate() != null ) activity.setMeetingDate( activityDto.getMeetingDate() );
+        if( activityDto.getDeadline() != null ) activity.setDeadline( activityDto.getDeadline() );
+        if( activityDto.getMaxParticipants() != null ) activity.setMaxParticipants(activityDto.getMaxParticipants() );
+
+        log.info("activity:{} - 모임이 정상적으로 수정되었습니다.", activityId);
     }
 }

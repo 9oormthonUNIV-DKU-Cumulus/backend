@@ -35,6 +35,8 @@ public enum ErrorCode {
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당유저를 찾을 수 없습니다."),
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 카테고리를 찾을 수 없습니다."),
     CLUB_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 동아리를 찾을 수 없습니다."),
+    ACTIVITY_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 모임글을 찾을 수 없습니다."),
+    NO_PERMISSION(HttpStatus.UNAUTHORIZED, "해당 모임글을 수정할 권한이 없습니다."),
 
     // 회원가입 처리 관련 에러
     EMAIL_DUPLICATE(HttpStatus.BAD_REQUEST, "이미 가입된 이메일입니다."),

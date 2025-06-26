@@ -1,9 +1,12 @@
 package com.cumulus.backend.activity.repository;
 
 import com.cumulus.backend.activity.domain.Activity;
+import com.cumulus.backend.club.domain.Club;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -19,4 +22,7 @@ public class ActivityRepository {
         }
     }
 
+    public Optional<Activity> findOne(Long activityId) {
+        return Optional.ofNullable(em.find(Activity.class, activityId));
+    }
 }
