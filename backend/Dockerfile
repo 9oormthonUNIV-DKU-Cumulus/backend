@@ -25,7 +25,7 @@ FROM eclipse-temurin:17-jre
 WORKDIR /app
 
 # 빌드 결과 복사
-COPY --from=builder /app/build/libs/*.jar app.jar
+COPY --from=builder /app/build/libs/backend-0.0.1-SNAPSHOT.jar app.jar
 
 # 포트 오픈
 EXPOSE 8080
