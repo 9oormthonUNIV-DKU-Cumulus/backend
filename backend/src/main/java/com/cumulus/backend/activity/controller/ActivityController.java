@@ -52,4 +52,14 @@ public class ActivityController {
         activityService.updateActivity(activityId, activityDto, userId);
         return ResponseEntity.ok(ApiResponse.success("모임이 수정되었습니다."));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<?>> deleteActivity(
+        @PathVariable("id") Long activityId, HttpServletRequest request ){
+        String token = jwtUtil.resolveToken(request);
+        Long userId = jwtUtil.extractUserId(token, false);
+
+        activityService.deleteActivity(activityId, userId);
+        return ResponseEntity.ok(ApiResponse.success("모임이 삭제되었습니다."));
+    }
 }

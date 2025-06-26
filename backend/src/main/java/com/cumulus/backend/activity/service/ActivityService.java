@@ -94,4 +94,19 @@ public class ActivityService {
 
         log.info("activity:{} - 모임이 정상적으로 수정되었습니다.", activityId);
     }
+
+    @Transactional
+    public void deleteActivity(Long activityId, Long userId) {
+        Activity activity = activityRepository.findOne(activityId)
+                .orElseThrow(()-> new CustomException(ErrorCode.ACTIVITY_NOT_FOUND));
+
+        // 주최자 본인인지 확인
+        if(!activity.getHostingUser().getId().equals(userId)){
+            log.error("모임삭제권한 없음 - 모임주최자:{}, 수정접근자:{}",activity.getHostingUser().getId(),userId);
+            throw new CustomException(ErrorCode.NO_PERMISSION);
+        }
+
+        activityRepository.delete(activity);
+        log.info("activity:{} - 모임이 정상적으로 삭제되었습니다.", activityId);
+    }
 }

@@ -25,4 +25,11 @@ public class ActivityRepository {
     public Optional<Activity> findOne(Long activityId) {
         return Optional.ofNullable(em.find(Activity.class, activityId));
     }
+
+    public void delete(Activity activity) {
+        if(!em.contains(activity)){
+            activity = em.merge(activity); // 영속상태가 아니면 병합
+        }
+        em.remove(activity);
+    }
 }
