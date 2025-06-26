@@ -2,6 +2,7 @@ package com.cumulus.backend.activity.service;
 
 import com.cumulus.backend.activity.domain.Activity;
 import com.cumulus.backend.activity.dto.ActivityCreateDto;
+import com.cumulus.backend.activity.dto.ActivityDetailDto;
 import com.cumulus.backend.activity.dto.ActivityUpdateDto;
 import com.cumulus.backend.activity.repository.ActivityRepository;
 import com.cumulus.backend.club.domain.Club;
@@ -61,6 +62,16 @@ public class ActivityService {
         log.info("activity:{} - 새 모임이 정상적으로 등록되었습니다.", savedActivity.getId());
 
         return savedActivity ;
+    }
+
+    public ActivityDetailDto readActivity(Long activityId) {
+        Activity activity = activityRepository.findOne(activityId)
+                .orElseThrow(()-> new CustomException(ErrorCode.ACTIVITY_NOT_FOUND));
+
+        return new ActivityDetailDto(
+          activity.getId(), activity.getTitle(), activity.getMeetingDate(), activity.getDeadline(),
+          activity.getMaxParticipants(), activity.getNowParticipants(), activity.getDescription()
+        );
     }
 
     @Transactional

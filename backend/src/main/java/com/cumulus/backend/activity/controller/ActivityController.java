@@ -2,6 +2,7 @@ package com.cumulus.backend.activity.controller;
 
 import com.cumulus.backend.activity.domain.Activity;
 import com.cumulus.backend.activity.dto.ActivityCreateDto;
+import com.cumulus.backend.activity.dto.ActivityDetailDto;
 import com.cumulus.backend.activity.dto.ActivityUpdateDto;
 import com.cumulus.backend.activity.service.ActivityService;
 import com.cumulus.backend.common.ApiResponse;
@@ -22,7 +23,7 @@ public class ActivityController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<?>> postActivity(
-            @RequestBody @Valid ActivityCreateDto activityDto, HttpServletRequest request){
+            @RequestBody @Valid ActivityCreateDto activityDto, HttpServletRequest request ){
         String token = jwtUtil.resolveToken(request);
         Long userId = jwtUtil.extractUserId(token, false);
 
@@ -30,12 +31,21 @@ public class ActivityController {
         return ResponseEntity.ok(ApiResponse.success("모임등록이 정상수행되었습니다."));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<?>> getActivity(
+            @PathVariable("id") Long activityId, HttpServletRequest request ){
+        String token = jwtUtil.resolveToken(request);
+        Long userId = jwtUtil.extractUserId(token, false);
+
+        ActivityDetailDto activityDetailDto = activityService.readActivity(activityId);
+        return ResponseEntity.ok(ApiResponse.success(activityDetailDto));
+    }
+
     @PatchMapping("/{id}")
     public ResponseEntity<ApiResponse<?>> patchActivity(
             @PathVariable("id") Long activityId,
             @RequestBody @Valid ActivityUpdateDto activityDto,
             HttpServletRequest request){
-
         String token = jwtUtil.resolveToken(request);
         Long userId = jwtUtil.extractUserId(token, false);
 
