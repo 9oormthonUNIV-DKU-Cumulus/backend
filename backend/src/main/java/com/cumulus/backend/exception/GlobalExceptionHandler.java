@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<ApiResponse<?>> handleCustomException(CustomException customException){
+        log.error("[커스텀 예외발생] {}", customException.getErrorCode().name());
         return ResponseEntity
                 .status(customException.getErrorCode().getStatus())
                 .body(ApiResponse.fail(null, customException.getErrorCode().name(),
@@ -27,6 +28,7 @@ public class GlobalExceptionHandler {
                 .findFirst()
                 .orElse("유효성 검증 실패");
 
+        log.error("[Validation] 유효성검사 실패 예외발생", validException);
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ApiResponse.fail(null, "VALIDATION_ERROR", errorMessage));

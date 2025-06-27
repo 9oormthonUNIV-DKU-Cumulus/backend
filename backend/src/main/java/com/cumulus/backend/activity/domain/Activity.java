@@ -5,7 +5,7 @@ import com.cumulus.backend.common.Category;
 import com.cumulus.backend.like.domain.Like;
 import com.cumulus.backend.user.domain.User;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -13,6 +13,10 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class Activity {
 
     @Id
@@ -21,6 +25,9 @@ public class Activity {
     private Long id;
 
     private String title;
+
+    @Enumerated(EnumType.STRING)
+    private Category category;
 
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -31,19 +38,16 @@ public class Activity {
 
     private LocalDateTime createdAt; // 모임글 생성일자
 
-    private int maxParticipants;
+    private int maxParticipants; // 최대참여 인원
 
-    private int nowParticipants;
-
-    private boolean isPrivate = false;
-
-    @Enumerated(EnumType.STRING)
-    private Category category;
+    private int nowParticipants; // 현재참여 인원
 
     // 모임 개최자
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id", nullable = false)
     private User hostingUser;
+
+    private boolean isPrivate = false;
 
     // 동아리 모임글일 경우
     @ManyToOne(fetch = FetchType.LAZY)
