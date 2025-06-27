@@ -27,8 +27,8 @@ public class ActivityController {
         String token = jwtUtil.resolveToken(request);
         Long userId = jwtUtil.extractUserId(token, false);
 
-        activityService.createActivity(activityDto, userId);
-        return ResponseEntity.ok(ApiResponse.success("모임등록이 정상수행되었습니다."));
+        Activity savedActivity = activityService.createActivity(activityDto, userId);
+        return ResponseEntity.ok(ApiResponse.success(ActivityDetailDto.fromEntity(savedActivity)));
     }
 
     @GetMapping("/{id}")

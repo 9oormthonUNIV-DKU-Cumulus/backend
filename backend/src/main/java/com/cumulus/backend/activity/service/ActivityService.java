@@ -1,9 +1,7 @@
 package com.cumulus.backend.activity.service;
 
 import com.cumulus.backend.activity.domain.Activity;
-import com.cumulus.backend.activity.dto.ActivityCreateDto;
-import com.cumulus.backend.activity.dto.ActivityDetailDto;
-import com.cumulus.backend.activity.dto.ActivityUpdateDto;
+import com.cumulus.backend.activity.dto.*;
 import com.cumulus.backend.activity.repository.ActivityRepository;
 import com.cumulus.backend.club.domain.Club;
 import com.cumulus.backend.club.repository.ClubRepository;
@@ -18,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.cumulus.backend.exception.ErrorCode.CLUB_NOT_FOUND;
 
@@ -108,5 +108,17 @@ public class ActivityService {
 
         activityRepository.delete(activity);
         log.info("activity:{} - 모임이 정상적으로 삭제되었습니다.", activityId);
+    }
+
+    public ActivityListDto readActivityList(ActivitySearchDto activitySearchDto) {
+        Category category = Category.fromId(activitySearchDto.getCategoryId());
+        if(activitySearchDto.getSort()==null) activitySearchDto.setSort("latest");
+        List<Activity> activities = activityRepository.search(activitySearchDto, category);
+
+        List<ActivityDetailDto> activityDtos = activities.stream()
+                .map(activity -> ActivityDetailDto.fromEntity(activity))
+                .collect(Collectors.toList());
+
+        return new ActivityListDto(activityDtos);
     }
 }

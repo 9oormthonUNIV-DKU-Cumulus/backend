@@ -1,5 +1,6 @@
 package com.cumulus.backend.activity.dto;
 
+import com.cumulus.backend.activity.domain.Activity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -15,4 +16,16 @@ public class ActivityDetailDto {
     private int maxParticipants;
     private int nowParticipants;
     private String description;
+
+    public static ActivityDetailDto fromEntity(Activity activity) {
+        return new ActivityDetailDto(
+                activity.getId(),
+                activity.getTitle(),
+                activity.getMeetingDate(),
+                activity.getDeadline(),
+                activity.getMaxParticipants(),
+                activity.getNowParticipants(),
+                activity.getDescription()
+        );
+    }
 }
