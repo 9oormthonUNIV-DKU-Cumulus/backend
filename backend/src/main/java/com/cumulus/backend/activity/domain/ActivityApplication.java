@@ -3,12 +3,15 @@ package com.cumulus.backend.activity.domain;
 import com.cumulus.backend.common.ApplicationStatus;
 import com.cumulus.backend.user.domain.User;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class ActivityApplication {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "activity_application_id")
@@ -29,4 +32,10 @@ public class ActivityApplication {
 
     @Enumerated(EnumType.STRING)
     private ApplicationStatus applicationStatus;
+
+    private String applyUserName;
+
+    private String applyUserPhoneNumber;
+
+    private String applyUserMajor;
 }
