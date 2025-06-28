@@ -1,6 +1,6 @@
 package com.cumulus.backend.club.domain;
 
-import com.cumulus.backend.common.ApplicationStatus;
+import com.cumulus.backend.common.ApplyStatus;
 import com.cumulus.backend.user.domain.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -26,5 +26,5 @@ public class ClubApplication {
     private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
-    private ApplicationStatus status;
+    private ApplyStatus status;
 }

@@ -7,6 +7,7 @@ import com.cumulus.backend.activity.dto.ActivityApplicationForm;
 import com.cumulus.backend.activity.service.ActivityApplicationService;
 import com.cumulus.backend.activity.service.ActivityService;
 import com.cumulus.backend.common.ApiResponse;
+import com.cumulus.backend.common.ApplyStatus;
 import com.cumulus.backend.security.jwt.JwtUtil;
 import com.cumulus.backend.user.domain.User;
 import com.cumulus.backend.user.service.UserService;
@@ -28,7 +29,7 @@ public class ActivityApplicationController {
     private final ActivityService activityService;
     private final UserService userService;
 
-    @GetMapping("/{id}/apply-form")
+    @GetMapping("/{activityId}/apply-form")
     public ResponseEntity<ApiResponse<?>> getApplicationForm( HttpServletRequest request ){
         String token = jwtUtil.resolveToken(request);
         Long userId = jwtUtil.extractUserId(token, false);
@@ -41,9 +42,9 @@ public class ActivityApplicationController {
         return ResponseEntity.ok(ApiResponse.success(activityApplicationForm));
     }
 
-    @PostMapping("/{id}/apply")
+    @PostMapping("/{activityId}/apply")
     public ResponseEntity<ApiResponse<?>> postApplication(
-            HttpServletRequest request, @PathVariable("id") Long activityId,
+            HttpServletRequest request, @PathVariable("activityId") Long activityId,
             @RequestBody @Valid ActivityApplicationCreateRequestDto applicationCreateDto
     ){
         String token = jwtUtil.resolveToken(request);
@@ -52,9 +53,9 @@ public class ActivityApplicationController {
         return ResponseEntity.ok(ApiResponse.success("모임신청 등록되었습니다."));
     }
 
-    @GetMapping("/{id}/applications")
+    @GetMapping("/{activityId}/applications")
     public ResponseEntity<ApiResponse<?>> getApplication(
-            HttpServletRequest request, @PathVariable("id") Long activityId
+            HttpServletRequest request, @PathVariable("activityId") Long activityId
     ){
         String token = jwtUtil.resolveToken(request);
         Long userId = jwtUtil.extractUserId(token, false);
@@ -65,5 +66,31 @@ public class ActivityApplicationController {
                 .map(ActivityApplicationDto::fromEntity)
                 .toList();
         return ResponseEntity.ok(ApiResponse.success(result));
+    }
+
+    @PostMapping("/applications/{activityId}/{applyId}/approve")
+    public ResponseEntity<ApiResponse<?>> patchApplicationApprove(
+            HttpServletRequest request,
+            @PathVariable("applyId") Long applicationId,
+            @PathVariable("activityId") Long activityId
+    ){
+        String token = jwtUtil.resolveToken(request);
+        Long userId = jwtUtil.extractUserId(token, false);
+
+        activityApplicationService.updateApplication(userId, activityId, applicationId, ApplyStatus.APPROVE);
+        return ResponseEntity.ok(ApiResponse.success("모임상태변경 - 승인"));
+    }
+
+    @PostMapping("/applications/{activityId}/{applyId}/reject")
+    public ResponseEntity<ApiResponse<?>> patchApplicationReject(
+            HttpServletRequest request,
+            @PathVariable("applyId") Long applicationId,
+            @PathVariable("activityId") Long activityId
+    ){
+        String token = jwtUtil.resolveToken(request);
+        Long userId = jwtUtil.extractUserId(token, false);
+
+        activityApplicationService.updateApplication(userId, activityId, applicationId, ApplyStatus.REJECT);
+        return ResponseEntity.ok(ApiResponse.success("모임상태변경 - 거부"));
     }
 }

@@ -1,5 +1,5 @@
 package com.cumulus.backend.common;
 
-public enum ApplicationStatus {
+public enum ApplyStatus {
     PENDING, APPROVE, REJECT
 }
