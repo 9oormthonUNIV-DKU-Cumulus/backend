@@ -59,4 +59,13 @@ public class MyPageController {
         return ResponseEntity.ok(ApiResponse.success(activityPending));
     }
 
+    @GetMapping("/activity-applications/approve")
+    public ResponseEntity<ApiResponse<?>> getApproveApplication( HttpServletRequest request ){
+        String token = jwtUtil.resolveToken(request);
+        Long userId = jwtUtil.extractUserId(token, false);
+
+        ActivityListDto activityPending = activityService.getActivityWithStatus(userId, ApplyStatus.APPROVE);
+        return ResponseEntity.ok(ApiResponse.success(activityPending));
+    }
+
 }
