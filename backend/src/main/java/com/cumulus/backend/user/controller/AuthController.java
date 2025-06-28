@@ -56,7 +56,7 @@ public class AuthController {
         }
         
         // 유저를 조회하여 accessToken 생성
-        User user = userService.getUserById(userId);
+        User user = userService.findById(userId);
         List<String> authorities = List.of(user.getRole().name());
         String newAccessToken = jwtUtil.createAccessToken(userId, authorities);
 

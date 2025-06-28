@@ -1,13 +1,12 @@
 package com.cumulus.backend.activity.dto;
 
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
-public class ActivityCreateDto {
+public class ActivityCreateRequestDto {
 
     @NotBlank(message = "모임글 제목은 반드시 입력해야합니다.")
     private String title;

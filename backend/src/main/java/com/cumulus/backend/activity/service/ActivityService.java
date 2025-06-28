@@ -31,8 +31,13 @@ public class ActivityService {
     private final UserRepository userRepository;
     private final ClubRepository clubRepository;
 
+    public Activity findById(Long activityId){
+        return activityRepository.findOne(activityId)
+                .orElseThrow(()-> new CustomException(ErrorCode.ACTIVITY_NOT_FOUND));
+    }
+
     @Transactional
-    public Activity createActivity(ActivityCreateDto activityDto, Long userId) {
+    public Activity createActivity(ActivityCreateRequestDto activityDto, Long userId) {
         Category category = Category.fromId(activityDto.getCategoryId());
         LocalDateTime createdAt = LocalDateTime.now();
         User hostingUser = userRepository.findOne(userId)
@@ -65,8 +70,7 @@ public class ActivityService {
     }
 
     public ActivityDetailDto readActivity(Long activityId) {
-        Activity activity = activityRepository.findOne(activityId)
-                .orElseThrow(()-> new CustomException(ErrorCode.ACTIVITY_NOT_FOUND));
+        Activity activity = findById(activityId);
 
         return new ActivityDetailDto(
           activity.getId(), activity.getTitle(), activity.getMeetingDate(), activity.getDeadline(),
@@ -76,8 +80,7 @@ public class ActivityService {
 
     @Transactional
     public void updateActivity(Long activityId, ActivityUpdateDto activityDto, Long userId) {
-        Activity activity = activityRepository.findOne(activityId)
-                .orElseThrow(()-> new CustomException(ErrorCode.ACTIVITY_NOT_FOUND));
+        Activity activity = findById(activityId);
 
         // 주최자 본인인지 확인
         if(!activity.getHostingUser().getId().equals(userId)){
@@ -97,8 +100,7 @@ public class ActivityService {
 
     @Transactional
     public void deleteActivity(Long activityId, Long userId) {
-        Activity activity = activityRepository.findOne(activityId)
-                .orElseThrow(()-> new CustomException(ErrorCode.ACTIVITY_NOT_FOUND));
+        Activity activity = findById(activityId);
 
         // 주최자 본인인지 확인
         if(!activity.getHostingUser().getId().equals(userId)){

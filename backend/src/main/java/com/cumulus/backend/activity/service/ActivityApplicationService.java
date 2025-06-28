@@ -10,6 +10,7 @@ import com.cumulus.backend.exception.CustomException;
 import com.cumulus.backend.exception.ErrorCode;
 import com.cumulus.backend.user.domain.User;
 import com.cumulus.backend.user.repository.UserRepository;
+import com.cumulus.backend.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,24 +22,15 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ActivityApplicationService{
 
-    private final UserRepository userRepository;
-    private final ActivityRepository activityRepository;
     private final ActivityApplicationRepository activityApplicationRepository;
-
-    public User loadUserInfoForApplicationForm(Long userId) {
-        User user = userRepository.findOne(userId)
-                .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
-        return user;
-    }
+    private final ActivityService activityService;
+    private final UserService userService;
 
     @Transactional
     public ActivityApplication createActivityApplication(Long activityId, Long userId,
                                           ActivityApplicationCreateDto applicationCreateDto) {
-        Activity activity = activityRepository.findOne(activityId)
-                .orElseThrow(()-> new CustomException(ErrorCode.ACTIVITY_NOT_FOUND));
-
-        User user = userRepository.findOne(userId)
-                .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+        Activity activity = activityService.findById(activityId);
+        User user = userService.findById(userId);
 
         ActivityApplication activityApplication = ActivityApplication.builder()
                             .activity(activity)
@@ -50,7 +42,6 @@ public class ActivityApplicationService{
                             .applyUserPhoneNumber(applicationCreateDto.getPhoneNumber())
                             .applyUserMajor(applicationCreateDto.getMajor())
                             .build();
-
 
         return activityApplicationRepository.save(activityApplication);
     }
