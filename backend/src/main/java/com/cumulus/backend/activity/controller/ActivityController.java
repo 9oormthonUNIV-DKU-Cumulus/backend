@@ -39,7 +39,7 @@ public class ActivityController {
         String token = jwtUtil.resolveToken(request);
         Long userId = jwtUtil.extractUserId(token, false);
 
-        ActivityDetailDto activityDetailDto = activityService.readActivity(activityId);
+        ActivityDetailDto activityDetailDto = activityService.getActivity(activityId);
         return ResponseEntity.ok(ApiResponse.success(activityDetailDto));
     }
 

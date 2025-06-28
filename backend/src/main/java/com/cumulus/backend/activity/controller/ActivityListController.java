@@ -23,7 +23,7 @@ public class ActivityListController {
     @GetMapping("api/activities")
     public ResponseEntity<ApiResponse<?>> getActivityList( @Valid @ModelAttribute ActivitySearchRequestDto activitySearchRequestDto){
         log.info("모임목록조회 - query변수 : categoryId={}, 정렬조건={}", activitySearchRequestDto.getCategoryId(), activitySearchRequestDto.getSort());
-        ActivityListDto activityListDto = activityService.readActivityList(activitySearchRequestDto);
+        ActivityListDto activityListDto = activityService.getActivityList(activitySearchRequestDto);
         return ResponseEntity.ok(ApiResponse.success(activityListDto));
     }
 }

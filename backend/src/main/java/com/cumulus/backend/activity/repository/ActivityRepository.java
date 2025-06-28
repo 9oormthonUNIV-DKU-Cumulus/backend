@@ -3,6 +3,7 @@ package com.cumulus.backend.activity.repository;
 import com.cumulus.backend.activity.domain.Activity;
 import com.cumulus.backend.activity.dto.ActivitySearchRequestDto;
 import com.cumulus.backend.common.Category;
+import com.cumulus.backend.user.domain.User;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -51,5 +52,11 @@ public class ActivityRepository {
         query.setParameter("category", category);
 
         return query.getResultList();
+    }
+
+    public List<Activity> findByHostingUser(User user) {
+        return em.createQuery("select a from Activity a where a.hostingUser =: hostingUser", Activity.class)
+                .setParameter("hostingUser", user)
+                .getResultList();
     }
 }

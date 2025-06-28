@@ -10,6 +10,7 @@ import com.cumulus.backend.exception.CustomException;
 import com.cumulus.backend.exception.ErrorCode;
 import com.cumulus.backend.user.domain.User;
 import com.cumulus.backend.user.repository.UserRepository;
+import com.cumulus.backend.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ public class ActivityService {
     private final ActivityRepository activityRepository;
     private final UserRepository userRepository;
     private final ClubRepository clubRepository;
+    private final UserService userService;
 
     public Activity findById(Long activityId){
         return activityRepository.findOne(activityId)
@@ -69,7 +71,7 @@ public class ActivityService {
         return savedActivity ;
     }
 
-    public ActivityDetailDto readActivity(Long activityId) {
+    public ActivityDetailDto getActivity(Long activityId) {
         Activity activity = findById(activityId);
 
         return new ActivityDetailDto(
@@ -112,13 +114,23 @@ public class ActivityService {
         log.info("activity:{} - 모임이 정상적으로 삭제되었습니다.", activityId);
     }
 
-    public ActivityListDto readActivityList(ActivitySearchRequestDto activitySearchRequestDto) {
+    public ActivityListDto getActivityList(ActivitySearchRequestDto activitySearchRequestDto) {
         Category category = Category.fromId(activitySearchRequestDto.getCategoryId());
         if(activitySearchRequestDto.getSort()==null) activitySearchRequestDto.setSort("latest");
         List<Activity> activities = activityRepository.search(activitySearchRequestDto, category);
 
         List<ActivityDetailDto> activityDtos = activities.stream()
-                .map(activity -> ActivityDetailDto.fromEntity(activity))
+                .map(activity -> ActivityDetailDto.fromEntityWithoutDescription(activity))
+                .collect(Collectors.toList());
+
+        return new ActivityListDto(activityDtos);
+    }
+
+    public ActivityListDto getActivityHosting(Long userId) {
+        User user = userService.findById(userId);
+        List<Activity> activities = activityRepository.findByHostingUser(user);
+        List<ActivityDetailDto> activityDtos = activities.stream()
+                .map(activity -> ActivityDetailDto.fromEntityWithoutDescription(activity))
                 .collect(Collectors.toList());
 
         return new ActivityListDto(activityDtos);

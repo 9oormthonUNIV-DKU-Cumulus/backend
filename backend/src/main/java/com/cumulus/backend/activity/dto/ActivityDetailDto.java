@@ -28,4 +28,16 @@ public class ActivityDetailDto {
                 activity.getDescription()
         );
     }
+
+    public static ActivityDetailDto fromEntityWithoutDescription(Activity activity) {
+        return new ActivityDetailDto(
+                activity.getId(),
+                activity.getTitle(),
+                activity.getMeetingDate(),
+                activity.getDeadline(),
+                activity.getMaxParticipants(),
+                activity.getNowParticipants(),
+                null // description 없이 null로
+        );
+    }
 }

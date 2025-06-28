@@ -1,5 +1,6 @@
 package com.cumulus.backend.mypage.controller;
 
+import com.cumulus.backend.activity.dto.ActivityListDto;
 import com.cumulus.backend.activity.service.ActivityApplicationService;
 import com.cumulus.backend.activity.service.ActivityService;
 import com.cumulus.backend.common.ApiResponse;
@@ -30,6 +31,15 @@ public class MyPageController {
 
         UserInfoDto userInfo = userService.getUserInfo(userId);
         return ResponseEntity.ok(ApiResponse.success(userInfo));
+    }
+
+    @GetMapping("/activities")
+    public ResponseEntity<ApiResponse<?>> getHostingApplication( HttpServletRequest request ) {
+        String token = jwtUtil.resolveToken(request);
+        Long userId = jwtUtil.extractUserId(token, false);
+
+        ActivityListDto activityHosting = activityService.getActivityHosting(userId);
+        return ResponseEntity.ok(ApiResponse.success(activityHosting));
     }
 
 }
