@@ -60,9 +60,9 @@ public class ActivityApplicationController {
         String token = jwtUtil.resolveToken(request);
         Long userId = jwtUtil.extractUserId(token, false);
 
-        List<ActivityApplication> activityApplications = activityApplicationService.getActivityApplications(userId, activityId);
+        List<ActivityApplication> applications = activityApplicationService.getActivityApplications(userId, activityId);
 
-        List<ActivityApplicationDto> result = activityApplications.stream()
+        List<ActivityApplicationDto> result = applications.stream()
                 .map(ActivityApplicationDto::fromEntity)
                 .toList();
         return ResponseEntity.ok(ApiResponse.success(result));

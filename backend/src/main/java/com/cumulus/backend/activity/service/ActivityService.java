@@ -1,10 +1,13 @@
 package com.cumulus.backend.activity.service;
 
 import com.cumulus.backend.activity.domain.Activity;
+import com.cumulus.backend.activity.domain.ActivityApplication;
 import com.cumulus.backend.activity.dto.*;
+import com.cumulus.backend.activity.repository.ActivityApplicationRepository;
 import com.cumulus.backend.activity.repository.ActivityRepository;
 import com.cumulus.backend.club.domain.Club;
 import com.cumulus.backend.club.repository.ClubRepository;
+import com.cumulus.backend.common.ApplyStatus;
 import com.cumulus.backend.common.Category;
 import com.cumulus.backend.exception.CustomException;
 import com.cumulus.backend.exception.ErrorCode;
@@ -32,6 +35,7 @@ public class ActivityService {
     private final UserRepository userRepository;
     private final ClubRepository clubRepository;
     private final UserService userService;
+    private final ActivityApplicationRepository activityApplicationRepository;
 
     public Activity findById(Long activityId){
         return activityRepository.findOne(activityId)
@@ -120,7 +124,7 @@ public class ActivityService {
         List<Activity> activities = activityRepository.search(activitySearchRequestDto, category);
 
         List<ActivityDetailDto> activityDtos = activities.stream()
-                .map(activity -> ActivityDetailDto.fromEntityWithoutDescription(activity))
+                .map(ActivityDetailDto::fromEntityWithoutDescription)
                 .collect(Collectors.toList());
 
         return new ActivityListDto(activityDtos);
@@ -130,9 +134,21 @@ public class ActivityService {
         User user = userService.findById(userId);
         List<Activity> activities = activityRepository.findByHostingUser(user);
         List<ActivityDetailDto> activityDtos = activities.stream()
-                .map(activity -> ActivityDetailDto.fromEntityWithoutDescription(activity))
+                .map(ActivityDetailDto::fromEntityWithoutDescription)
                 .collect(Collectors.toList());
 
+        return new ActivityListDto(activityDtos);
+    }
+
+    public ActivityListDto getActivityWithStatus(Long userId, ApplyStatus applyStatus) {
+        User user = userService.findById(userId);
+        List<ActivityApplication> applications = activityApplicationRepository.findByUserAndStatus(user, applyStatus);
+        List<Activity> activities = applications.stream()
+                .map(ActivityApplication::getActivity)
+                .toList();
+        List<ActivityDetailDto> activityDtos = activities.stream()
+                .map(ActivityDetailDto::fromEntityWithoutDescription)
+                .collect(Collectors.toList());
         return new ActivityListDto(activityDtos);
     }
 }

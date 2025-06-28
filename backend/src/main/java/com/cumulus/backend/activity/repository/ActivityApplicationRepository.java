@@ -2,6 +2,8 @@ package com.cumulus.backend.activity.repository;
 
 import com.cumulus.backend.activity.domain.Activity;
 import com.cumulus.backend.activity.domain.ActivityApplication;
+import com.cumulus.backend.common.ApplyStatus;
+import com.cumulus.backend.user.domain.User;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -32,6 +34,16 @@ public class ActivityApplicationRepository {
         return em.createQuery(
                 "select a from ActivityApplication a where a.activity =: activity", ActivityApplication.class)
                 .setParameter("activity", activity)
+                .getResultList();
+    }
+
+    public List<ActivityApplication> findByUserAndStatus(User user, ApplyStatus status) {
+        return em.createQuery(
+                "select a from ActivityApplication a join fetch a.activity " +
+                        "where a.user = :user and a.applyStatus = :status",
+                ActivityApplication.class)
+                .setParameter("user", user)
+                .setParameter("status", status)
                 .getResultList();
     }
 }

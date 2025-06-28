@@ -22,4 +22,13 @@ public class ActivityApplicationDto {
                 activityApplication.getCreatedAt()
         );
     }
+
+    public static ActivityApplicationDto fromEntityWithoutText(ActivityApplication activityApplication){
+        return new ActivityApplicationDto(
+                activityApplication.getId(),
+                activityApplication.getApplyUserName(),
+                null,
+                activityApplication.getCreatedAt()
+        );
+    }
 }
