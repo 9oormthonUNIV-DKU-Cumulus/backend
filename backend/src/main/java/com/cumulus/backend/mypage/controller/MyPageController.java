@@ -1,9 +1,5 @@
 package com.cumulus.backend.mypage.controller;
 
-import com.cumulus.backend.activity.domain.Activity;
-import com.cumulus.backend.activity.domain.ActivityApplication;
-import com.cumulus.backend.activity.dto.ActivityApplicationDto;
-import com.cumulus.backend.activity.dto.ActivityDetailDto;
 import com.cumulus.backend.activity.dto.ActivityListDto;
 import com.cumulus.backend.activity.service.ActivityApplicationService;
 import com.cumulus.backend.activity.service.ActivityService;
@@ -11,7 +7,6 @@ import com.cumulus.backend.common.ApiResponse;
 import com.cumulus.backend.common.ApplyStatus;
 import com.cumulus.backend.mypage.dto.UserInfoDto;
 import com.cumulus.backend.security.jwt.JwtUtil;
-import com.cumulus.backend.user.domain.User;
 import com.cumulus.backend.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
