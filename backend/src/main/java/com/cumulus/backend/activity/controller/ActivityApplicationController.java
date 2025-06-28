@@ -8,6 +8,7 @@ import com.cumulus.backend.common.ApiResponse;
 import com.cumulus.backend.security.jwt.JwtUtil;
 import com.cumulus.backend.user.domain.User;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,7 @@ public class ActivityApplicationController {
     @PostMapping("/{id}/apply")
     public ResponseEntity<ApiResponse<?>> postApplication(
             HttpServletRequest request, @PathVariable("id") Long activityId,
-            ActivityApplicationCreateDto applicationCreateDto
+            @RequestBody @Valid ActivityApplicationCreateDto applicationCreateDto
     ){
         String token = jwtUtil.resolveToken(request);
         Long userId = jwtUtil.extractUserId(token, false);

@@ -3,6 +3,7 @@ package com.cumulus.backend.activity.service;
 import com.cumulus.backend.activity.domain.Activity;
 import com.cumulus.backend.activity.domain.ActivityApplication;
 import com.cumulus.backend.activity.dto.ActivityApplicationCreateDto;
+import com.cumulus.backend.activity.repository.ActivityApplicationRepository;
 import com.cumulus.backend.activity.repository.ActivityRepository;
 import com.cumulus.backend.common.ApplicationStatus;
 import com.cumulus.backend.exception.CustomException;
@@ -11,6 +12,7 @@ import com.cumulus.backend.user.domain.User;
 import com.cumulus.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -21,6 +23,7 @@ public class ActivityApplicationService{
 
     private final UserRepository userRepository;
     private final ActivityRepository activityRepository;
+    private final ActivityApplicationRepository activityApplicationRepository;
 
     public User loadUserInfoForApplicationForm(Long userId) {
         User user = userRepository.findOne(userId)
@@ -28,6 +31,7 @@ public class ActivityApplicationService{
         return user;
     }
 
+    @Transactional
     public ActivityApplication createActivityApplication(Long activityId, Long userId,
                                           ActivityApplicationCreateDto applicationCreateDto) {
         Activity activity = activityRepository.findOne(activityId)
@@ -47,6 +51,7 @@ public class ActivityApplicationService{
                             .applyUserMajor(applicationCreateDto.getMajor())
                             .build();
 
-        return activityApplication;
+
+        return activityApplicationRepository.save(activityApplication);
     }
 }
