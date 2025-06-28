@@ -2,24 +2,24 @@ package com.cumulus.backend.activity.service;
 
 import com.cumulus.backend.activity.domain.Activity;
 import com.cumulus.backend.activity.domain.ActivityApplication;
-import com.cumulus.backend.activity.dto.ActivityApplicationCreateDto;
+import com.cumulus.backend.activity.dto.ActivityApplicationCreateRequestDto;
 import com.cumulus.backend.activity.repository.ActivityApplicationRepository;
-import com.cumulus.backend.activity.repository.ActivityRepository;
 import com.cumulus.backend.common.ApplicationStatus;
 import com.cumulus.backend.exception.CustomException;
 import com.cumulus.backend.exception.ErrorCode;
 import com.cumulus.backend.user.domain.User;
-import com.cumulus.backend.user.repository.UserRepository;
 import com.cumulus.backend.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ActivityApplicationService{
 
     private final ActivityApplicationRepository activityApplicationRepository;
@@ -28,7 +28,7 @@ public class ActivityApplicationService{
 
     @Transactional
     public ActivityApplication createActivityApplication(Long activityId, Long userId,
-                                          ActivityApplicationCreateDto applicationCreateDto) {
+                                          ActivityApplicationCreateRequestDto applicationCreateDto) {
         Activity activity = activityService.findById(activityId);
         User user = userService.findById(userId);
 
@@ -43,6 +43,17 @@ public class ActivityApplicationService{
                             .applyUserMajor(applicationCreateDto.getMajor())
                             .build();
 
-        return activityApplicationRepository.save(activityApplication);
+        ActivityApplication savedApplication = activityApplicationRepository.save(activityApplication);
+        log.info("모임신청 등록완료 - 신청id{}", savedApplication.getId());
+        return savedApplication;
+    }
+
+    public List<ActivityApplication> getActivityApplications(Long userId, Long activityId) {
+        Activity activity = activityService.findById(activityId);
+        if(!activity.getHostingUser().getId().equals(userId)){
+            log.error("모임신청내역 조회권한 없음 - 모임주최자:{}, 조회접근자:{}",activity.getHostingUser().getId(),userId);
+            throw new CustomException(ErrorCode.NO_PERMISSION_APPLICATION);
+        }
+        return activityApplicationRepository.findByActivity(activity);
     }
 }

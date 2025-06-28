@@ -1,12 +1,13 @@
 package com.cumulus.backend.activity.controller;
 
 import com.cumulus.backend.activity.domain.Activity;
-import com.cumulus.backend.activity.dto.ActivityCreateDto;
+import com.cumulus.backend.activity.dto.ActivityCreateRequestDto;
 import com.cumulus.backend.activity.dto.ActivityDetailDto;
-import com.cumulus.backend.activity.dto.ActivityUpdateDto;
+import com.cumulus.backend.activity.dto.ActivityUpdateRequestDto;
 import com.cumulus.backend.activity.service.ActivityService;
 import com.cumulus.backend.common.ApiResponse;
 import com.cumulus.backend.security.jwt.JwtUtil;
+import com.cumulus.backend.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,15 +21,16 @@ public class ActivityController {
 
     private final ActivityService activityService;
     private final JwtUtil jwtUtil;
+    private final UserService userService;
 
     @PostMapping
     public ResponseEntity<ApiResponse<?>> postActivity(
-            @RequestBody @Valid ActivityCreateDto activityDto, HttpServletRequest request ){
+            @RequestBody @Valid ActivityCreateRequestDto activityDto, HttpServletRequest request ){
         String token = jwtUtil.resolveToken(request);
         Long userId = jwtUtil.extractUserId(token, false);
 
         Activity savedActivity = activityService.createActivity(activityDto, userId);
-        return ResponseEntity.ok(ApiResponse.success(ActivityDetailDto.fromEntity(savedActivity)));
+        return ResponseEntity.ok(ApiResponse.success(savedActivity.getId()));
     }
 
     @GetMapping("/{id}")
@@ -44,7 +46,7 @@ public class ActivityController {
     @PatchMapping("/{id}")
     public ResponseEntity<ApiResponse<?>> patchActivity(
             @PathVariable("id") Long activityId,
-            @RequestBody @Valid ActivityUpdateDto activityDto,
+            @RequestBody @Valid ActivityUpdateRequestDto activityDto,
             HttpServletRequest request){
         String token = jwtUtil.resolveToken(request);
         Long userId = jwtUtil.extractUserId(token, false);

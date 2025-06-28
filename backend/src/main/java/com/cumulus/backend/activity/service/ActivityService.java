@@ -79,13 +79,13 @@ public class ActivityService {
     }
 
     @Transactional
-    public void updateActivity(Long activityId, ActivityUpdateDto activityDto, Long userId) {
+    public void updateActivity(Long activityId, ActivityUpdateRequestDto activityDto, Long userId) {
         Activity activity = findById(activityId);
 
         // 주최자 본인인지 확인
         if(!activity.getHostingUser().getId().equals(userId)){
             log.error("모임수정권한 없음 - 모임주최자:{}, 수정접근자:{}",activity.getHostingUser().getId(),userId);
-            throw new CustomException(ErrorCode.NO_PERMISSION);
+            throw new CustomException(ErrorCode.NO_PERMISSION_ACTIVITY);
         }
 
         if( activityDto.getTitle() != null ) activity.setTitle( activityDto.getTitle() );
@@ -105,17 +105,17 @@ public class ActivityService {
         // 주최자 본인인지 확인
         if(!activity.getHostingUser().getId().equals(userId)){
             log.error("모임삭제권한 없음 - 모임주최자:{}, 수정접근자:{}",activity.getHostingUser().getId(),userId);
-            throw new CustomException(ErrorCode.NO_PERMISSION);
+            throw new CustomException(ErrorCode.NO_PERMISSION_ACTIVITY);
         }
 
         activityRepository.delete(activity);
         log.info("activity:{} - 모임이 정상적으로 삭제되었습니다.", activityId);
     }
 
-    public ActivityListDto readActivityList(ActivitySearchDto activitySearchDto) {
-        Category category = Category.fromId(activitySearchDto.getCategoryId());
-        if(activitySearchDto.getSort()==null) activitySearchDto.setSort("latest");
-        List<Activity> activities = activityRepository.search(activitySearchDto, category);
+    public ActivityListDto readActivityList(ActivitySearchRequestDto activitySearchRequestDto) {
+        Category category = Category.fromId(activitySearchRequestDto.getCategoryId());
+        if(activitySearchRequestDto.getSort()==null) activitySearchRequestDto.setSort("latest");
+        List<Activity> activities = activityRepository.search(activitySearchRequestDto, category);
 
         List<ActivityDetailDto> activityDtos = activities.stream()
                 .map(activity -> ActivityDetailDto.fromEntity(activity))

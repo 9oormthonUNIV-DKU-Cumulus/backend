@@ -3,13 +3,12 @@ package com.cumulus.backend.activity.dto;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
-public class ActivityUpdateDto {
+public class ActivityUpdateRequestDto {
     private String title;
 
     @Min(value = 1, message = "카테고리는 1~10사이의 번호 값으로 지정해주세요." +

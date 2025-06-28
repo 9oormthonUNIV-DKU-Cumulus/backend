@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
 @Getter
-public class ActivityApplicationCreateDto {
+public class ActivityApplicationCreateRequestDto {
     @NotNull( message = "모임 신청자 이름은 반드시 입력해야합니다." )
     private String userName;
 

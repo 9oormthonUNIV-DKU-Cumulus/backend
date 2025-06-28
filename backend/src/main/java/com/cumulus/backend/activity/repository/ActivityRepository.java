@@ -1,7 +1,7 @@
 package com.cumulus.backend.activity.repository;
 
 import com.cumulus.backend.activity.domain.Activity;
-import com.cumulus.backend.activity.dto.ActivitySearchDto;
+import com.cumulus.backend.activity.dto.ActivitySearchRequestDto;
 import com.cumulus.backend.common.Category;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -36,14 +36,14 @@ public class ActivityRepository {
         em.remove(activity);
     }
 
-    public List<Activity> search(ActivitySearchDto activitySearchDto, Category category) {
+    public List<Activity> search(ActivitySearchRequestDto activitySearchRequestDto, Category category) {
         //필터조건
         String jpql = "select a from Activity a where a.category = :category";
 
         // 정렬조건
-        if( "latest".equals(activitySearchDto.getSort()) ) {
+        if( "latest".equals(activitySearchRequestDto.getSort()) ) {
             jpql += " order by a.createdAt desc";
-        } else if( "popular".equals(activitySearchDto.getSort()) ){
+        } else if( "popular".equals(activitySearchRequestDto.getSort()) ){
             jpql += " order by size(a.activityLikes) desc";
         }
 
