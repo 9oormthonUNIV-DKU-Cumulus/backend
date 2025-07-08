@@ -19,7 +19,11 @@ public class Constants {
             "/h2-console/**",
             "/favicon.ico",
             "/error",
-            "/test"
+            "/test",
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/swagger-resources/**",
+            "/webjars/**"
     );
 
     // jwt 인증헤더
