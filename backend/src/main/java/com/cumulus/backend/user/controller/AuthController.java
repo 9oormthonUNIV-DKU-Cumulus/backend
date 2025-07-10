@@ -10,6 +10,10 @@ import com.cumulus.backend.user.dto.ReissueRequest;
 import com.cumulus.backend.user.repository.UserRepository;
 import com.cumulus.backend.user.service.SignUpService;
 import com.cumulus.backend.user.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +34,7 @@ import java.util.List;
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "사용자 인증", description = "인증로직을 통한 토큰 발급, 재발급, 삭제 (*로그인은 /api/auth/login form POST 방식으로 처리됨)")
 public class AuthController {
 
     private final JwtUtil jwtUtil;
@@ -38,6 +43,8 @@ public class AuthController {
     private final SignUpService signUpService;
 
     @PostMapping("/reissue")
+    @Operation(summary = "토큰 재발급요청",
+            description = "refreshToken의 유효성 검증을 통한 accessToken재발급 - permitAll 엔드포인트")
     public ResponseEntity<ApiResponse<?>> reissueToken(@RequestBody @Valid ReissueRequest reissueRequest){
         String refreshToken = reissueRequest.getRefreshToken();
         
@@ -81,6 +88,8 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
+    @Operation(summary = "로그아웃", description = "서버측에서 refreshToken삭제, 클라측에서 accessToken삭제",
+                security = @SecurityRequirement(name="JWT"))
     public ResponseEntity<ApiResponse<?>> logout(HttpServletRequest request){
         String token = jwtUtil.resolveToken(request);
         Long userId = jwtUtil.extractUserId(token, false);
