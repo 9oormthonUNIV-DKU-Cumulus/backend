@@ -35,10 +35,7 @@ public class ActivityController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<?>> getActivity(
-            @PathVariable("id") Long activityId, HttpServletRequest request ){
-        String token = jwtUtil.resolveToken(request);
-        Long userId = jwtUtil.extractUserId(token, false);
-
+            @PathVariable("id") Long activityId ){
         ActivityDetailDto activityDetailDto = activityService.getActivity(activityId);
         return ResponseEntity.ok(ApiResponse.success(activityDetailDto));
     }

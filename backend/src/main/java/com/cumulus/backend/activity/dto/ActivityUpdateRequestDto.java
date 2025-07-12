@@ -11,12 +11,6 @@ import java.time.LocalDateTime;
 public class ActivityUpdateRequestDto {
     private String title;
 
-    @Min(value = 1, message = "카테고리는 1~10사이의 번호 값으로 지정해주세요." +
-            "1.스포츠  2.외국/언어  3.댄스  4.봉사활동  5.자기계발  6.독서/글  7.문화/공연  8.음악/악기  9.여행  10.업종/직무")
-    @Max(value = 10, message = "카테고리는 1~10사이의 번호 값으로 지정해주세요." +
-            "1.스포츠  2.외국/언어  3.댄스  4.봉사활동  5.자기계발  6.독서/글  7.문화/공연  8.음악/악기  9.여행  10.업종/직무")
-    private Integer categoryId;
-
     private String description;
 
     @Future(message = "모임일자는 반드시 미래여야 합니다.")

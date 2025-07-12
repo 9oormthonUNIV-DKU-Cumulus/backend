@@ -37,20 +37,17 @@ public class ActivityRepository {
         em.remove(activity);
     }
 
-    public List<Activity> search(ActivitySearchRequestDto activitySearchRequestDto, Category category) {
-        //필터조건
-        String jpql = "select a from Activity a where a.category = :category";
+    public List<Activity> search(String sort) {
+        String jpql = "select a from Activity a";
 
         // 정렬조건
-        if( "latest".equals(activitySearchRequestDto.getSort()) ) {
+        if("latest".equals(sort)) {
             jpql += " order by a.createdAt desc";
-        } else if( "popular".equals(activitySearchRequestDto.getSort()) ){
+        } else if("popular".equals(sort)){
             jpql += " order by size(a.activityLikes) desc";
         }
 
         var query = em.createQuery(jpql, Activity.class);
-        query.setParameter("category", category);
-
         return query.getResultList();
     }
 

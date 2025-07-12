@@ -25,9 +25,6 @@ public class Activity {
 
     private String title;
 
-    @Enumerated(EnumType.STRING)
-    private Category category;
-
     @Column(columnDefinition = "TEXT")
     private String description;
 
@@ -48,9 +45,9 @@ public class Activity {
 
     private boolean isPrivate = false;
 
-    // 동아리 모임글일 경우
+    // 모임의 동아리
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "club_id", nullable = true)
+    @JoinColumn(name = "club_id", nullable = false)
     private Club club;
 
     @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL)
