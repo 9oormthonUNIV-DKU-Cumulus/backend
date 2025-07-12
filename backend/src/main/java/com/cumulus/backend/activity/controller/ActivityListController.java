@@ -26,7 +26,7 @@ public class ActivityListController {
     @GetMapping("api/activities")
     @Operation(summary = "홈화면 모임조회", description = "정렬옵션에 따른 전체모임 조회(특정 동아리소속X)")
     public ResponseEntity<ApiResponse<?>> getActivityList(
-            @Parameter(name = "정렬기준: latest, popular, all", required = true)
+            @Parameter(description = "정렬기준: latest, popular, all", required = false)
             @RequestParam(defaultValue = "latest")
             @Pattern(regexp = "latest|popular|all",
                     message = "정렬 조건은 latest, popular, all 중 하나여야 합니다.")
