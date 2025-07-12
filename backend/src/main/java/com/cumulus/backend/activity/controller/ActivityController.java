@@ -8,6 +8,9 @@ import com.cumulus.backend.activity.service.ActivityService;
 import com.cumulus.backend.common.ApiResponse;
 import com.cumulus.backend.security.jwt.JwtUtil;
 import com.cumulus.backend.user.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/activity")
+@Tag(name = "모임")
 public class ActivityController {
 
     private final ActivityService activityService;
@@ -24,6 +28,7 @@ public class ActivityController {
     private final UserService userService;
 
     @PostMapping
+    @Operation(summary = "모임등록", description = "동아리내 새로운 모임등록")
     public ResponseEntity<ApiResponse<?>> postActivity(
             @RequestBody @Valid ActivityCreateRequestDto activityDto, HttpServletRequest request ){
         String token = jwtUtil.resolveToken(request);
@@ -34,13 +39,15 @@ public class ActivityController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "특정모임 상세조회", description = "특정 1개의 모임에 대한 상세조회")
     public ResponseEntity<ApiResponse<?>> getActivity(
-            @PathVariable("id") Long activityId ){
+            @Parameter(description = "모임Id", required = true) @PathVariable("id") Long activityId ){
         ActivityDetailDto activityDetailDto = activityService.getActivity(activityId);
         return ResponseEntity.ok(ApiResponse.success(activityDetailDto));
     }
 
     @PatchMapping("/{id}")
+    @Operation(summary = "특정모임 수정", description = "모임주최자 권한을 가진경우 모임에 대한 수정")
     public ResponseEntity<ApiResponse<?>> patchActivity(
             @PathVariable("id") Long activityId,
             @RequestBody @Valid ActivityUpdateRequestDto activityDto,
@@ -53,6 +60,7 @@ public class ActivityController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "특정모임 상세조회", description = "모임주최자 권한을 가진경우 모임에 대한 삭제")
     public ResponseEntity<ApiResponse<?>> deleteActivity(
         @PathVariable("id") Long activityId, HttpServletRequest request ){
         String token = jwtUtil.resolveToken(request);
