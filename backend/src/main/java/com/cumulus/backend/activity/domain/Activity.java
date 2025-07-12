@@ -1,7 +1,6 @@
 package com.cumulus.backend.activity.domain;
 
 import com.cumulus.backend.club.domain.Club;
-import com.cumulus.backend.common.Category;
 import com.cumulus.backend.like.domain.Like;
 import com.cumulus.backend.user.domain.User;
 import jakarta.persistence.*;

@@ -8,7 +8,7 @@ import com.cumulus.backend.activity.repository.ActivityRepository;
 import com.cumulus.backend.club.domain.Club;
 import com.cumulus.backend.club.repository.ClubRepository;
 import com.cumulus.backend.common.ApplyStatus;
-import com.cumulus.backend.common.Category;
+import com.cumulus.backend.activity.domain.Category;
 import com.cumulus.backend.exception.CustomException;
 import com.cumulus.backend.exception.ErrorCode;
 import com.cumulus.backend.user.domain.User;
