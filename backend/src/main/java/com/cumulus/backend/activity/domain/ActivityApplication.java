@@ -1,8 +1,7 @@
 package com.cumulus.backend.activity.domain;
 
 import com.cumulus.backend.club.domain.ClubMember;
-import com.cumulus.backend.common.ApplyStatus;
-import com.cumulus.backend.user.domain.User;
+import com.cumulus.backend.club.domain.ApplyStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,16 +23,13 @@ public class ActivityApplication {
     private Activity activity;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "club_member_id", nullable = false)
     private ClubMember applicant;
 
     @Column(columnDefinition = "TEXT")
     private String applicationText;
 
     private LocalDateTime createdAt;
-
-    @Enumerated(EnumType.STRING)
-    private ApplyStatus applyStatus;
 
     private String applyUserName;
 

@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 
 @Getter
 public class ActivityCreateRequestDto {
+    @NotNull(message = "소속 동아리값은 반드시 입력해야합니다.")
+    private Long clubId;
 
     @NotBlank(message = "모임글 제목은 반드시 입력해야합니다.")
     private String title;
@@ -25,7 +27,4 @@ public class ActivityCreateRequestDto {
     @NotNull(message = "최대인원수 반드시 입력해야합니다.")
     @Min(value = 1, message = "모집인원수는 최대 한명이상이 되어야합니다.")
     private Integer maxParticipants;
-
-    @NotNull(message = "소속 동아리값은 반드시 입력해야합니다.")
-    private Long clubId;
 }

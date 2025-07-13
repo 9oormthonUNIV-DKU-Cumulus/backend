@@ -3,6 +3,7 @@ package com.cumulus.backend.activity.repository;
 import com.cumulus.backend.activity.domain.Activity;
 import com.cumulus.backend.activity.dto.ActivitySearchRequestDto;
 import com.cumulus.backend.activity.domain.Category;
+import com.cumulus.backend.club.domain.ClubMember;
 import com.cumulus.backend.user.domain.User;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -38,22 +39,26 @@ public class ActivityRepository {
     }
 
     public List<Activity> search(String sort) {
-        String jpql = "select a from Activity a";
-
-        // 정렬조건
-        if("latest".equals(sort)) {
-            jpql += " order by a.createdAt desc";
-        } else if("popular".equals(sort)){
-            jpql += " order by size(a.activityLikes) desc";
+        if ("popular".equals(sort)) {
+            return em.createQuery("""
+                select a from Activity a
+                left join a.activityLikes al
+                group by a
+                order by count(al) desc
+            """, Activity.class).getResultList();
+        } else if ("latest".equals(sort)) {
+            return em.createQuery("""
+                select a from Activity a
+                order by a.createdAt desc
+            """, Activity.class).getResultList();
+        } else {
+            return em.createQuery("select a from Activity a", Activity.class).getResultList();
         }
-
-        var query = em.createQuery(jpql, Activity.class);
-        return query.getResultList();
     }
 
-    public List<Activity> findByHostingUser(User user) {
+    public List<Activity> findByHostingUser(ClubMember clubMember) {
         return em.createQuery("select a from Activity a where a.hostingUser =: hostingUser", Activity.class)
-                .setParameter("hostingUser", user)
+                .setParameter("hostingUser", clubMember)
                 .getResultList();
     }
 }

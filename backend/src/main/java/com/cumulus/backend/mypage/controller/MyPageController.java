@@ -4,7 +4,7 @@ import com.cumulus.backend.activity.dto.ActivityListDto;
 import com.cumulus.backend.activity.service.ActivityApplicationService;
 import com.cumulus.backend.activity.service.ActivityService;
 import com.cumulus.backend.common.ApiResponse;
-import com.cumulus.backend.common.ApplyStatus;
+import com.cumulus.backend.club.domain.ApplyStatus;
 import com.cumulus.backend.mypage.dto.UserInfoDto;
 import com.cumulus.backend.security.jwt.JwtUtil;
 import com.cumulus.backend.user.service.UserService;
@@ -16,8 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/user/me")
@@ -56,17 +54,7 @@ public class MyPageController {
         String token = jwtUtil.resolveToken(request);
         Long userId = jwtUtil.extractUserId(token, false);
 
-        ActivityListDto activityPending = activityService.getActivityWithStatus(userId, ApplyStatus.PENDING);
-        return ResponseEntity.ok(ApiResponse.success(activityPending));
-    }
-
-    @GetMapping("/activity-applications/approve")
-    @Operation(summary = "유저신청 모임조회", description = "해당 유저가 신청한 모임(승인상태)을 조회")
-    public ResponseEntity<ApiResponse<?>> getApproveApplication( HttpServletRequest request ){
-        String token = jwtUtil.resolveToken(request);
-        Long userId = jwtUtil.extractUserId(token, false);
-
-        ActivityListDto activityPending = activityService.getActivityWithStatus(userId, ApplyStatus.APPROVE);
+        ActivityListDto activityPending = activityService.getActivityWithStatus(userId);
         return ResponseEntity.ok(ApiResponse.success(activityPending));
     }
 

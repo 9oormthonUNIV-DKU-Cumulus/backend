@@ -2,12 +2,14 @@ package com.cumulus.backend.activity.repository;
 
 import com.cumulus.backend.activity.domain.Activity;
 import com.cumulus.backend.activity.domain.ActivityApplication;
-import com.cumulus.backend.common.ApplyStatus;
+import com.cumulus.backend.club.domain.ApplyStatus;
+import com.cumulus.backend.club.domain.ClubMember;
 import com.cumulus.backend.user.domain.User;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,13 +39,9 @@ public class ActivityApplicationRepository {
                 .getResultList();
     }
 
-    public List<ActivityApplication> findByUserAndStatus(User user, ApplyStatus status) {
-        return em.createQuery(
-                "select a from ActivityApplication a join fetch a.activity " +
-                        "where a.user = :user and a.applyStatus = :status",
-                ActivityApplication.class)
-                .setParameter("user", user)
-                .setParameter("status", status)
+    public List<ActivityApplication> findByApplicant(ClubMember clubMember) {
+        return em.createQuery("select a from ActivityApplication a where a.applicant = :applicant")
+                .setParameter("applicant", clubMember)
                 .getResultList();
     }
 }

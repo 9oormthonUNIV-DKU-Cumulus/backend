@@ -4,7 +4,7 @@ import com.cumulus.backend.activity.domain.Activity;
 import com.cumulus.backend.activity.domain.ActivityApplication;
 import com.cumulus.backend.activity.dto.ActivityApplicationCreateRequestDto;
 import com.cumulus.backend.activity.repository.ActivityApplicationRepository;
-import com.cumulus.backend.common.ApplyStatus;
+import com.cumulus.backend.club.domain.ApplyStatus;
 import com.cumulus.backend.exception.CustomException;
 import com.cumulus.backend.exception.ErrorCode;
 import com.cumulus.backend.user.domain.User;
@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

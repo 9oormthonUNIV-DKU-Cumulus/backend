@@ -1,6 +1,5 @@
 package com.cumulus.backend.club.domain;
 
-import com.cumulus.backend.common.ApplyStatus;
 import com.cumulus.backend.user.domain.User;
 import jakarta.persistence.*;
 import lombok.Getter;

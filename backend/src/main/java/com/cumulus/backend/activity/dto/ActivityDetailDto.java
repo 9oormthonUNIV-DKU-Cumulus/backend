@@ -17,6 +17,7 @@ public class ActivityDetailDto {
     private int nowParticipants;
     private String description;
     private Long clubId;
+    private boolean isValid;  // 유효한 날짜 여부 필드
 
     public static ActivityDetailDto fromEntity(Activity activity) {
         return new ActivityDetailDto(
@@ -27,7 +28,8 @@ public class ActivityDetailDto {
                 activity.getMaxParticipants(),
                 activity.getNowParticipants(),
                 activity.getDescription(),
-                activity.getClub().getId()
+                activity.getClub().getId(),
+                activity.getMeetingDate().isAfter(LocalDateTime.now()) // 유효 여부 판단
         );
     }
 
@@ -40,7 +42,8 @@ public class ActivityDetailDto {
                 activity.getMaxParticipants(),
                 activity.getNowParticipants(),
                 null, // description 없이 null로
-                activity.getClub().getId()
+                activity.getClub().getId(),
+                activity.getMeetingDate().isAfter(LocalDateTime.now())
         );
     }
 }

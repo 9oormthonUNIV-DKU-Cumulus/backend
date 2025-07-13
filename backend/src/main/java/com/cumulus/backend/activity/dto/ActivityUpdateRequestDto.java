@@ -3,12 +3,16 @@ package com.cumulus.backend.activity.dto;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
 public class ActivityUpdateRequestDto {
+    @NotBlank(message = "수정할 모임의 동아리id는 반드시 입력해야합니다.")
+    private Long cludId;
+
     private String title;
 
     private String description;
