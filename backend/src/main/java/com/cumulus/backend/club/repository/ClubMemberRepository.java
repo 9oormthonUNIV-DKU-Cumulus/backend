@@ -16,7 +16,8 @@ public class ClubMemberRepository {
 
     public Optional<ClubMember> findByUserIdAndClubId(Long userId, Long clubId){
         List<ClubMember> resultList = em.createQuery(
-                "select cm from ClubMember cm where cm.user.id = :userId and cm.club.id = :clubId")
+                "select cm from ClubMember cm where cm.user.id = :userId and cm.club.id = :clubId",
+                        ClubMember.class)
                 .setParameter("userId", userId)
                 .setParameter("clubId", clubId)
                 .getResultList();

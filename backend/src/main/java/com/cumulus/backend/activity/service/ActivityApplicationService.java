@@ -74,6 +74,8 @@ public class ActivityApplicationService{
             log.error("모임신청내역 삭제권한 없음");
             throw new CustomException(ErrorCode.NO_PERMISSION_APPLICATION);
         }
+
+        activityApplicationRepository.delete(application);
         log.info("모임신청 삭제완료");
         activity.setNowParticipants(activity.getNowParticipants() - 1);
     }

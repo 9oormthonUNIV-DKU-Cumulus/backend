@@ -56,7 +56,6 @@ public class ActivityService {
                 .nowParticipants(0)
                 .hostingUser(clubMember)
                 .club(clubMember.getClub())
-                .isPrivate(true) // 동아리 모임 비공개 처리
                 .build();
 
         Activity savedActivity = activityRepository.save(activity);

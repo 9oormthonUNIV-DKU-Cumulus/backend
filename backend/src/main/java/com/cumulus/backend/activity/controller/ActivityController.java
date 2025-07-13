@@ -60,7 +60,7 @@ public class ActivityController {
         String token = jwtUtil.resolveToken(request);
         Long userId = jwtUtil.extractUserId(token, false);
 
-        Long clubId = activityDto.getCludId();
+        Long clubId = activityDto.getClubId();
         ClubMember clubMember = clubMemberService.getClubMemberOrThrow(userId, clubId);
 
         activityService.updateActivity(activityId, activityDto, clubMember);

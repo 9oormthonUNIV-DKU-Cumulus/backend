@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 public class ActivityUpdateRequestDto {
     @NotBlank(message = "수정할 모임의 동아리id는 반드시 입력해야합니다.")
-    private Long cludId;
+    private Long clubId;
 
     private String title;
 

@@ -40,7 +40,8 @@ public class ActivityApplicationRepository {
     }
 
     public List<ActivityApplication> findByApplicant(ClubMember clubMember) {
-        return em.createQuery("select a from ActivityApplication a where a.applicant = :applicant")
+        return em.createQuery("select a from ActivityApplication a where a.applicant = :applicant"
+                        , ActivityApplication.class)
                 .setParameter("applicant", clubMember)
                 .getResultList();
     }
@@ -53,5 +54,12 @@ public class ActivityApplicationRepository {
                 .setParameter("applicant", clubMembership)
                 .getSingleResult();
         return count > 0;
+    }
+
+    public void delete(ActivityApplication application) {
+        if (!em.contains(application)) {
+            application = em.merge(application);
+        }
+        em.remove(application);
     }
 }
