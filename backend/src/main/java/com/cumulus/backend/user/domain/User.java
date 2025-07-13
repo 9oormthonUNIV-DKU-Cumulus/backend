@@ -42,28 +42,12 @@ public class User {
     private String major;
 
     private String phoneNumber;
-    
-    // 개최한 모임
-    @OneToMany(mappedBy = "hostingUser", cascade = CascadeType.ALL)
-    private List<Activity> hostedActivities = new ArrayList<>();
 
-    // 생성한 동아리
-    @OneToMany(mappedBy = "leader", cascade = CascadeType.ALL)
-    private List<Club> createdClubs = new ArrayList<>();
+    // 신청한 동아리
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<ClubApplication> applications = new ArrayList<>();
 
     // 좋아요한 모임
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Like> activityLikes = new ArrayList<>();
-
-    // 참여신청한 모임
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<ActivityApplication> activityApplications = new ArrayList<>();
-
-    // 참여신청한 동아리
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<ClubApplication> clubApplications = new ArrayList<>();
-
-    // 가입한 동아리 멤버십
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<ClubMember> clubMemberships = new ArrayList<>();
 }

@@ -1,6 +1,7 @@
 package com.cumulus.backend.activity.domain;
 
 import com.cumulus.backend.club.domain.Club;
+import com.cumulus.backend.club.domain.ClubMember;
 import com.cumulus.backend.like.domain.Like;
 import com.cumulus.backend.user.domain.User;
 import jakarta.persistence.*;
@@ -38,17 +39,17 @@ public class Activity {
 
     private int nowParticipants; // 현재참여 인원
 
-    // 모임 개최자
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id", nullable = false)
-    private User hostingUser;
-
-    private boolean isPrivate = false;
-
-    // 모임의 동아리
+    // 모임의 소속 동아리
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "club_id", nullable = false)
     private Club club;
+
+    // 모임 개최자
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="hosting_member_id", nullable = false)
+    private ClubMember hostingUser;
+
+    private boolean isPrivate = false;
 
     @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL)
     private List<Like> activityLikes = new ArrayList<>();

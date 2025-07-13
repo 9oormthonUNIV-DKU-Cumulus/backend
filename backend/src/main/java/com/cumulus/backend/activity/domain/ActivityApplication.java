@@ -1,5 +1,6 @@
 package com.cumulus.backend.activity.domain;
 
+import com.cumulus.backend.club.domain.ClubMember;
 import com.cumulus.backend.common.ApplyStatus;
 import com.cumulus.backend.user.domain.User;
 import jakarta.persistence.*;
@@ -24,7 +25,7 @@ public class ActivityApplication {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private ClubMember applicant;
 
     @Column(columnDefinition = "TEXT")
     private String applicationText;
