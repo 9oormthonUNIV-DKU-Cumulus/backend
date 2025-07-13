@@ -5,6 +5,7 @@ import com.cumulus.backend.activity.domain.ActivityApplication;
 import com.cumulus.backend.activity.dto.ActivityApplicationCreateRequestDto;
 import com.cumulus.backend.activity.repository.ActivityApplicationRepository;
 import com.cumulus.backend.club.domain.ApplyStatus;
+import com.cumulus.backend.club.domain.ClubMember;
 import com.cumulus.backend.exception.CustomException;
 import com.cumulus.backend.exception.ErrorCode;
 import com.cumulus.backend.user.domain.User;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,17 +29,19 @@ public class ActivityApplicationService{
     private final UserService userService;
 
     @Transactional
-    public ActivityApplication createActivityApplication(Long activityId, Long userId,
+    public ActivityApplication createActivityApplication(Activity activity, ClubMember clubMembership,
                                           ActivityApplicationCreateRequestDto applicationCreateDto) {
-        Activity activity = activityService.findById(activityId);
-        User user = userService.findById(userId);
+        boolean alreadyApplied = activityApplicationRepository
+                .existsByActivityAndApplicant(activity, clubMembership);
+        if (alreadyApplied) {
+            throw new CustomException(ErrorCode.DUPLICATE_ACTIVITY_APPLICATION);
+        }
 
         ActivityApplication activityApplication = ActivityApplication.builder()
                             .activity(activity)
-                            .user(user)
+                            .applicant(clubMembership)
                             .applicationText(applicationCreateDto.getApplicationText())
                             .createdAt(LocalDateTime.now())
-                            .applyStatus(ApplyStatus.PENDING)
                             .applyUserName(applicationCreateDto.getUserName())
                             .applyUserPhoneNumber(applicationCreateDto.getPhoneNumber())
                             .applyUserMajor(applicationCreateDto.getMajor())
@@ -45,39 +49,32 @@ public class ActivityApplicationService{
 
         ActivityApplication savedApplication = activityApplicationRepository.save(activityApplication);
         log.info("모임신청 등록완료 - 신청id{}", savedApplication.getId());
+        activity.setNowParticipants(activity.getNowParticipants() + 1);
         return savedApplication;
     }
 
     public List<ActivityApplication> getActivityApplications(Long userId, Long activityId) {
-        Activity activity = activityService.findById(activityId);
-        if(!activity.getHostingUser().getId().equals(userId)){
-            log.error("모임신청내역 조회권한 없음 - 모임주최자:{}, 조회접근자:{}",activity.getHostingUser().getId(),userId);
+        if(!activityService.isHostingUser(activityId, userId)){
+            log.error("모임신청내역 조회권한 없음");
             throw new CustomException(ErrorCode.NO_PERMISSION_APPLICATION);
         }
+
+        Activity activity = activityService.findById(activityId);
         return activityApplicationRepository.findByActivity(activity);
     }
 
     @Transactional
-    public void updateApplication(Long userId, Long activityId, Long applicationId, ApplyStatus applyStatus) {
-        Activity activity = activityService.findById(activityId);
-        if(!activity.getHostingUser().getId().equals(userId)){
-            log.warn("모임신청 승인권한 없음 - 모임주최자:{}, 조회접근자:{}",activity.getHostingUser().getId(),userId);
-            throw new CustomException(ErrorCode.NO_PERMISSION_APPLICATION);
-        }
+    public void deleteActivityApplication(Activity activity, Long activtiyApplicationId,
+                                          ClubMember clubMembership) {
 
-        ActivityApplication application = activityApplicationRepository.findOne(applicationId)
+        ActivityApplication application = activityApplicationRepository.findOne(activtiyApplicationId)
                 .orElseThrow(()-> new CustomException(ErrorCode.APPLICATION_NOT_FOUND));
 
-        if(!application.getActivity().getId().equals(activityId)){
-            log.warn("신청&모임 불일치 - 신청번호:{}, 모임:{}", applicationId, activityId);
-            throw new CustomException(ErrorCode.APPILICATION_ACTIVITY_MISMATCH);
+        if(!application.getApplicant().equals(clubMembership)){
+            log.error("모임신청내역 삭제권한 없음");
+            throw new CustomException(ErrorCode.NO_PERMISSION_APPLICATION);
         }
-
-        switch (applyStatus){
-            case APPROVE -> application.setApplyStatus(ApplyStatus.APPROVE);
-            case REJECT -> application.setApplyStatus(ApplyStatus.REJECT);
-        }
-
-        log.info("모임신청상태변경 - 신청({})의 상태: {}", application.getId(), application.getApplyStatus() );
+        log.info("모임신청 삭제완료");
+        activity.setNowParticipants(activity.getNowParticipants() - 1);
     }
 }

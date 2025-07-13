@@ -20,9 +20,5 @@ public class ClubMemberService {
                 .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_CLUB_MEMBER));
     }
 
-    public List<ClubMember> getClubMembersByUser(User user) {
-        return clubMemberRepository.findAllByUser(user);
-    }
-
 
 }

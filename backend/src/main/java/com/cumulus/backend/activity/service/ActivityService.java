@@ -7,9 +7,9 @@ import com.cumulus.backend.activity.repository.ActivityApplicationRepository;
 import com.cumulus.backend.activity.repository.ActivityRepository;
 import com.cumulus.backend.club.domain.ClubMember;
 import com.cumulus.backend.club.repository.ClubMemberRepository;
-import com.cumulus.backend.club.domain.ApplyStatus;
 import com.cumulus.backend.exception.CustomException;
 import com.cumulus.backend.exception.ErrorCode;
+import com.cumulus.backend.mypage.dto.ActivityAndApplicationDto;
 import com.cumulus.backend.user.domain.User;
 import com.cumulus.backend.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +31,11 @@ public class ActivityService {
     private final UserService userService;
     private final ActivityApplicationRepository activityApplicationRepository;
     private final ClubMemberRepository clubMemberRepository;
+
+    public boolean fullActivtyParticipants(Long activityId){
+        Activity activity = findById(activityId);
+        return activity.getNowParticipants() >= activity.getMaxParticipants();
+    };
 
     public Activity findById(Long activityId){
         return activityRepository.findOne(activityId)
@@ -125,7 +130,7 @@ public class ActivityService {
     }
 
     // 마이페이지용 - 참여한 모임
-    public ActivityListDto getActivityWithStatus(Long userId) {
+    public List<ActivityAndApplicationDto> getActivityJoin(Long userId) {
         // 유저가 등록된 모든 클럽멤버십 조회
         User user = userService.findById(userId);
         List<ClubMember> clubMemberships = clubMemberRepository.findAllByUser(user);
@@ -135,12 +140,20 @@ public class ActivityService {
                 .flatMap(member -> activityApplicationRepository.findByApplicant(member).stream())
                 .toList();
 
-        // 모임추출
-        List<ActivityDetailDto> activityDtos = allActivityApplications.stream()
-                .map(ActivityApplication::getActivity)
-                .map(ActivityDetailDto::fromEntityWithoutDescription)
+        // 모임 및 모임신청까지 함께 조회
+        List<ActivityAndApplicationDto> activityDtos = allActivityApplications.stream()
+                .map(app -> new ActivityAndApplicationDto(
+                        app.getId(),
+                        ActivityDetailDto.fromEntityWithoutDescription(app.getActivity())
+                ))
                 .toList();
 
-        return new ActivityListDto(activityDtos);
+        return activityDtos;
+    }
+
+    public boolean isHostingUser(Long activityId, Long userId) {
+        Activity activity = findById(activityId);
+        Long hostingUserId = activity.getHostingUser().getUser().getId(); // ClubMember → User → ID
+        return hostingUserId.equals(userId);
     }
 }

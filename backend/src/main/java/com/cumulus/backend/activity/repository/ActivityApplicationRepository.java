@@ -44,4 +44,14 @@ public class ActivityApplicationRepository {
                 .setParameter("applicant", clubMember)
                 .getResultList();
     }
+
+    public boolean existsByActivityAndApplicant(Activity activity, ClubMember clubMembership) {
+        Long count = em.createQuery(
+                        "select count(a) from ActivityApplication a " +
+                                "where a.activity = :activity and a.applicant = :applicant", Long.class)
+                .setParameter("activity", activity)
+                .setParameter("applicant", clubMembership)
+                .getSingleResult();
+        return count > 0;
+    }
 }
