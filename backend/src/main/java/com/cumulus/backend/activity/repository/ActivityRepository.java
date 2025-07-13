@@ -1,8 +1,9 @@
 package com.cumulus.backend.activity.repository;
 
 import com.cumulus.backend.activity.domain.Activity;
-import com.cumulus.backend.activity.dto.ActivitySearchDto;
-import com.cumulus.backend.common.Category;
+import com.cumulus.backend.activity.dto.ActivitySearchRequestDto;
+import com.cumulus.backend.activity.domain.Category;
+import com.cumulus.backend.user.domain.User;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -36,20 +37,23 @@ public class ActivityRepository {
         em.remove(activity);
     }
 
-    public List<Activity> search(ActivitySearchDto activitySearchDto, Category category) {
-        //필터조건
-        String jpql = "select a from Activity a where a.category = :category";
+    public List<Activity> search(String sort) {
+        String jpql = "select a from Activity a";
 
         // 정렬조건
-        if( "latest".equals(activitySearchDto.getSort()) ) {
+        if("latest".equals(sort)) {
             jpql += " order by a.createdAt desc";
-        } else if( "popular".equals(activitySearchDto.getSort()) ){
+        } else if("popular".equals(sort)){
             jpql += " order by size(a.activityLikes) desc";
         }
 
         var query = em.createQuery(jpql, Activity.class);
-        query.setParameter("category", category);
-
         return query.getResultList();
+    }
+
+    public List<Activity> findByHostingUser(User user) {
+        return em.createQuery("select a from Activity a where a.hostingUser =: hostingUser", Activity.class)
+                .setParameter("hostingUser", user)
+                .getResultList();
     }
 }

@@ -1,4 +1,4 @@
-package com.cumulus.backend.common;
+package com.cumulus.backend.activity.domain;
 
 import com.cumulus.backend.exception.CustomException;
 import com.cumulus.backend.exception.ErrorCode;
@@ -11,7 +11,7 @@ import java.util.Arrays;
 public enum Category {
     SPORTS(1, "스포츠"),
     LANGUAGE(2, "외국/언어"),
-    DANCE(3, "댄스"),
+    PHOTO(3, "사진/영상"),
     VOLUNTEER(4, "봉사활동"),
     SELF_IMPROVEMENT(5, "자기계발"),
     READING_WRITING(6, "독서/글"),

@@ -1,14 +1,18 @@
 package com.cumulus.backend.activity.domain;
 
-import com.cumulus.backend.common.ApplicationStatus;
+import com.cumulus.backend.common.ApplyStatus;
 import com.cumulus.backend.user.domain.User;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class ActivityApplication {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "activity_application_id")
@@ -28,5 +32,11 @@ public class ActivityApplication {
     private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
-    private ApplicationStatus applicationStatus;
+    private ApplyStatus applyStatus;
+
+    private String applyUserName;
+
+    private String applyUserPhoneNumber;
+
+    private String applyUserMajor;
 }

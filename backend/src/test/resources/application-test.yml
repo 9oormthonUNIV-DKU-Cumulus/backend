@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+jwt:
+  header: Authorization
+  secret: testsecret
+  access-secret: testaccesssecretkeyforunittest123456testaccesssecretkeyforunittest123456
+  refresh-secret: testaccesssecretkeyforunittest123456testaccesssecretkeyforunittest123456
+  token-validity-in-seconds: 3600
+  access-token-validity-in-seconds: 1800
+  refresh-token-validity-in-seconds: 604800

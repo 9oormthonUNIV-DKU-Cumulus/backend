@@ -4,9 +4,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class EmailSendRequest {
     @NotBlank(message = "인증용 이메일은 반드시 입력해야합니다.")
     @Pattern(

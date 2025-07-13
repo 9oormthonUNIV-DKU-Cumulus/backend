@@ -16,6 +16,7 @@ public class ActivityDetailDto {
     private int maxParticipants;
     private int nowParticipants;
     private String description;
+    private Long clubId;
 
     public static ActivityDetailDto fromEntity(Activity activity) {
         return new ActivityDetailDto(
@@ -25,7 +26,21 @@ public class ActivityDetailDto {
                 activity.getDeadline(),
                 activity.getMaxParticipants(),
                 activity.getNowParticipants(),
-                activity.getDescription()
+                activity.getDescription(),
+                activity.getClub().getId()
+        );
+    }
+
+    public static ActivityDetailDto fromEntityWithoutDescription(Activity activity) {
+        return new ActivityDetailDto(
+                activity.getId(),
+                activity.getTitle(),
+                activity.getMeetingDate(),
+                activity.getDeadline(),
+                activity.getMaxParticipants(),
+                activity.getNowParticipants(),
+                null, // description 없이 null로
+                activity.getClub().getId()
         );
     }
 }
