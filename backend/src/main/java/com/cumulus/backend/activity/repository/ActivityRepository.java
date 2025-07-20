@@ -1,10 +1,7 @@
 package com.cumulus.backend.activity.repository;
 
 import com.cumulus.backend.activity.domain.Activity;
-import com.cumulus.backend.activity.dto.ActivitySearchRequestDto;
-import com.cumulus.backend.activity.domain.Category;
 import com.cumulus.backend.club.domain.ClubMember;
-import com.cumulus.backend.user.domain.User;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

@@ -1,4 +1,4 @@
-package com.cumulus.backend.activity.domain;
+package com.cumulus.backend.club.domain;
 
 import com.cumulus.backend.exception.CustomException;
 import com.cumulus.backend.exception.ErrorCode;

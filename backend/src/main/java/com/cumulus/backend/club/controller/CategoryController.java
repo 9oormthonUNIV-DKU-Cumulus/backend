@@ -1,8 +1,8 @@
-package com.cumulus.backend.activity.controller;
+package com.cumulus.backend.club.controller;
 
-import com.cumulus.backend.activity.dto.CategoryDto;
+import com.cumulus.backend.club.dto.CategoryDto;
 import com.cumulus.backend.common.ApiResponse;
-import com.cumulus.backend.activity.domain.Category;
+import com.cumulus.backend.club.domain.Category;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;

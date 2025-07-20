@@ -1,6 +1,6 @@
-package com.cumulus.backend.activity.dto;
+package com.cumulus.backend.club.dto;
 
-import com.cumulus.backend.activity.domain.Category;
+import com.cumulus.backend.club.domain.Category;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

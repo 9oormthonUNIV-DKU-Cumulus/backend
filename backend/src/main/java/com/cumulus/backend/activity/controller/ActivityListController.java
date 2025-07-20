@@ -22,7 +22,7 @@ public class ActivityListController {
 
     private final ActivityService activityService;
 
-    //api/activities?sort={latest/popular/all}")
+    //api/activities?sort={latest/popular/all}
     @GetMapping("api/activities")
     @Operation(summary = "홈화면 모임조회", description = "정렬옵션에 따른 전체모임 조회(특정 동아리소속X)")
     public ResponseEntity<ApiResponse<?>> getActivityList(
@@ -32,7 +32,7 @@ public class ActivityListController {
                     message = "정렬 조건은 latest, popular, all 중 하나여야 합니다.")
             String sort
             ){
-        log.info("모임목록조회 - query변수 : 정렬조건={}", sort);
+        log.info("전체 모임 목록조회 | 필터링 조건 - sort: {}", sort);
         ActivityListDto activityListDto = activityService.getActivityListWithSort(sort);
         return ResponseEntity.ok(ApiResponse.success(activityListDto));
     }
