@@ -4,6 +4,7 @@ import com.cumulus.backend.activity.domain.Activity;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,8 @@ public class Club {
     private Long id;
 
     private String clubName;
+
+    private LocalDateTime createdAt;
 
     @Column(columnDefinition = "TEXT")
     private String clubDesc;

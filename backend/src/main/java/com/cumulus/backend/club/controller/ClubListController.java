@@ -2,13 +2,12 @@ package com.cumulus.backend.club.controller;
 
 import com.cumulus.backend.club.domain.Campus;
 import com.cumulus.backend.club.domain.Category;
-import com.cumulus.backend.club.dto.ClubListDto;
 import com.cumulus.backend.club.dto.ClubSummaryDto;
+import com.cumulus.backend.club.service.ClubService;
 import com.cumulus.backend.common.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
@@ -16,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -53,7 +54,7 @@ public class ClubListController {
         Category category = Category.fromId(categoryId);
         Campus campus = Campus.fromString(campusVal);
         log.info("동아리 목록 조회 | 필터링조건 - category: {}, campus: {}, sort: {}", category.getLabel(), campus.name(), sort);
-        ClubSummaryDto clubSummaryDto = clubService.getClubListWithFilters(category, campus, sort);
-        return ResponseEntity.ok(ApiResponse.success(clubSummaryDto));
+        List<ClubSummaryDto> clubSummaryDtoList = clubService.getClubListWithFilters(category, campus, sort);
+        return ResponseEntity.ok(ApiResponse.success(clubSummaryDtoList));
     }
 }
