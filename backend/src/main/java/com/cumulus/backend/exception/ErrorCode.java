@@ -37,6 +37,9 @@ public enum ErrorCode {
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 카테고리를 찾을 수 없습니다."),
     CAMPUS_NOT_FOUNT(HttpStatus.NOT_FOUND, "해당 캠퍼스는 존재하지 않습니다."),
     ACTIVITY_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 모임을 찾을 수 없습니다."),
+    CLUB_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 동아리를 찾을 수 없습니다."),
+    CLUB_LEADER_NOT_FOUNT(HttpStatus.NOT_FOUND, "해당 동아리의 대표자정보를 찾을 수 없습니다."),
+
     ACTIVTIY_FULL(HttpStatus.BAD_REQUEST, "모집인원이 가득찼습니다."),
     DUPLICATE_ACTIVITY_APPLICATION(HttpStatus.BAD_REQUEST, "이미 신청한 모임을 중복신청할 수 없습니다."),
     APPLICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 모임신청을 찾을 수 없습니다."),

@@ -8,6 +8,5 @@ import lombok.Getter;
 public class LeaderDto {
     private Long memberId;
     private String memberName;
-    private String introduction;
     private String profileImgUrl;
 }
