@@ -5,17 +5,22 @@ import com.cumulus.backend.activity.domain.ActivityApplication;
 import com.cumulus.backend.user.domain.User;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
+@Setter
 public class ClubMember {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "club_member_id")
     private Long id;
+
+    private String memberName;
+    private String profileImgUrl;
 
     @Enumerated(EnumType.STRING)
     private MemberRole role;

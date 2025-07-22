@@ -1,8 +1,11 @@
 package com.cumulus.backend.club.domain;
 
 import com.cumulus.backend.activity.domain.Activity;
+import com.cumulus.backend.club.dto.ClubCreateRequestDto;
+import com.cumulus.backend.user.domain.User;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -10,6 +13,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 public class Club {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,13 +33,8 @@ public class Club {
     @Enumerated(EnumType.STRING)
     private Campus campus;
 
-    // 동아리 관리자
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "leader_member_id", nullable = false)
-    private ClubMember leader;
-
     // 동아리 참여자들
-    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ClubMember> members = new ArrayList<>();
 
     // 동아리 모임들
@@ -45,4 +44,9 @@ public class Club {
     // 동아리 가입신청내역들
     @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
     private List<ClubApplication> applications = new ArrayList<>();
+
+    public void addMember(ClubMember member) {
+        members.add(member);
+        member.setClub(this);
+    }
 }

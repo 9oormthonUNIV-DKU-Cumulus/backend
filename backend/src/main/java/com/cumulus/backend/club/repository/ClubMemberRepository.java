@@ -29,4 +29,13 @@ public class ClubMemberRepository {
                 .setParameter("user", user)
                 .getResultList();
     }
+
+    public ClubMember save(ClubMember member) {
+        if(member.getId()==null){
+            em.persist(member);
+            return member;
+        } else {
+            return em.merge(member);
+        }
+    }
 }

@@ -20,5 +20,4 @@ public class ClubMemberService {
                 .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_CLUB_MEMBER));
     }
 
-
 }

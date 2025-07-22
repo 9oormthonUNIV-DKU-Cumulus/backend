@@ -43,6 +43,8 @@ public class User {
 
     private String phoneNumber;
 
+    private String profileImageUrl;
+
     // 신청한 동아리
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ClubApplication> applications = new ArrayList<>();

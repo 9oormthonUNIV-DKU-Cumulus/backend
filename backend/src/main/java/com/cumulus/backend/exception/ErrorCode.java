@@ -35,6 +35,7 @@ public enum ErrorCode {
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당유저를 찾을 수 없습니다."),
     USER_NOT_CLUB_MEMBER(HttpStatus.UNAUTHORIZED, "해당유저는 동아리의 멤버가 아닙니다."),
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 카테고리를 찾을 수 없습니다."),
+    CAMPUS_NOT_FOUNT(HttpStatus.NOT_FOUND, "해당 캠퍼스는 존재하지 않습니다."),
     ACTIVITY_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 모임을 찾을 수 없습니다."),
     ACTIVTIY_FULL(HttpStatus.BAD_REQUEST, "모집인원이 가득찼습니다."),
     DUPLICATE_ACTIVITY_APPLICATION(HttpStatus.BAD_REQUEST, "이미 신청한 모임을 중복신청할 수 없습니다."),

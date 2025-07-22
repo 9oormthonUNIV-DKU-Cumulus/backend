@@ -32,7 +32,8 @@ public class ActivityController {
     @PostMapping
     @Operation(summary = "모임등록", description = "동아리내 새로운 모임등록")
     public ResponseEntity<ApiResponse<?>> postActivity(
-            @RequestBody @Valid ActivityCreateRequestDto activityDto, HttpServletRequest request) {
+            @RequestBody @Valid ActivityCreateRequestDto activityDto, HttpServletRequest request
+    ) {
         String token = jwtUtil.resolveToken(request);
         Long userId = jwtUtil.extractUserId(token, false);
 
@@ -46,7 +47,8 @@ public class ActivityController {
     @GetMapping("/{id}")
     @Operation(summary = "특정모임 상세조회", description = "특정 1개의 모임에 대한 상세조회")
     public ResponseEntity<ApiResponse<?>> getActivity(
-            @Parameter(description = "모임Id", required = true) @PathVariable("id") Long activityId) {
+            @Parameter(description = "모임Id", required = true) @PathVariable("id") Long activityId
+    ) {
         ActivityDetailDto activityDetailDto = activityService.getActivity(activityId);
         return ResponseEntity.ok(ApiResponse.success(activityDetailDto));
     }
@@ -56,7 +58,8 @@ public class ActivityController {
     public ResponseEntity<ApiResponse<?>> patchActivity(
             @PathVariable("id") Long activityId,
             @RequestBody @Valid ActivityUpdateRequestDto activityDto,
-            HttpServletRequest request) {
+            HttpServletRequest request
+    ) {
         String token = jwtUtil.resolveToken(request);
         Long userId = jwtUtil.extractUserId(token, false);
 
