@@ -56,7 +56,7 @@ public class ActivityController {
     @PatchMapping("/{id}")
     @Operation(summary = "특정모임 수정", description = "모임주최자 권한을 가진경우 모임에 대한 수정")
     public ResponseEntity<ApiResponse<?>> patchActivity(
-            @PathVariable("id") Long activityId,
+            @Parameter(description = "모임Id", required = true) @PathVariable("id") Long activityId,
             @RequestBody @Valid ActivityUpdateRequestDto activityDto,
             HttpServletRequest request
     ) {
@@ -73,8 +73,9 @@ public class ActivityController {
     @DeleteMapping("/{id}")
     @Operation(summary = "특정모임 상세조회", description = "모임주최자 권한을 가진경우 모임에 대한 삭제")
     public ResponseEntity<ApiResponse<?>> deleteActivity(
-            @PathVariable("id") Long activityId, HttpServletRequest request,
-            @Parameter(description = "삭제할 모임의 clubID조회") @RequestParam Long clubId
+            @Parameter(description = "모임Id", required = true) @PathVariable("id") Long activityId,
+            @Parameter(description = "삭제할 모임의 clubID조회") @RequestParam Long clubId,
+            HttpServletRequest request
     ) {
         String token = jwtUtil.resolveToken(request);
         Long userId = jwtUtil.extractUserId(token, false);
