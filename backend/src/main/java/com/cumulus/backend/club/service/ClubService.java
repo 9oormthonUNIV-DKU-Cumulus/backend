@@ -110,4 +110,11 @@ public class ClubService {
 
         log.info("club:{} - 동아리가 정상적으로 수정되었습니다.", clubId);
     }
+
+    @Transactional
+    public void deleteClub(Long clubId) {
+        Club club = findById(clubId);
+        clubRepository.delete(club);
+        log.info("club:{} - 동아리가 정상적으로 삭제되었습니다.", clubId);
+    }
 }

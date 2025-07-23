@@ -66,4 +66,18 @@ public class ClubController {
         clubService.updateClub(clubId, clubDto);
         return ResponseEntity.ok(ApiResponse.success("동아리가 수정되었습니다."));
     }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "특정 동아리 삭제", description = "동아리 리더의 권한을 가질경우 동아리 삭제")
+    public ResponseEntity<ApiResponse<?>> deleteClub(
+            @Parameter(description = "동아리Id", required = true) @PathVariable("id") Long clubId,
+            HttpServletRequest request
+    ){
+        String token = jwtUtil.resolveToken(request);
+        Long userId = jwtUtil.extractUserId(token, false);
+        clubMemberService.checkClubLeaderOrThrow(userId, clubId);
+
+        clubService.deleteClub(clubId);
+        return ResponseEntity.ok(ApiResponse.success("동아리가 삭제되었습니다."));
+    }
 }

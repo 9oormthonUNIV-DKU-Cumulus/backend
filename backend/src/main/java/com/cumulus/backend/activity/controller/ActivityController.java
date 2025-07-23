@@ -71,7 +71,7 @@ public class ActivityController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "특정모임 상세조회", description = "모임주최자 권한을 가진경우 모임에 대한 삭제")
+    @Operation(summary = "특정모임 삭제", description = "모임주최자 권한을 가진경우 모임에 대한 삭제")
     public ResponseEntity<ApiResponse<?>> deleteActivity(
             @Parameter(description = "모임Id", required = true) @PathVariable("id") Long activityId,
             @Parameter(description = "삭제할 모임의 clubID조회") @RequestParam Long clubId,
