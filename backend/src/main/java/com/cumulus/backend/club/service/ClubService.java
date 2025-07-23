@@ -8,8 +8,8 @@ import com.cumulus.backend.club.repository.ClubRepository;
 import com.cumulus.backend.exception.CustomException;
 import com.cumulus.backend.exception.ErrorCode;
 import com.cumulus.backend.user.domain.User;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class ClubService {
 
     private final ClubRepository clubRepository;
@@ -68,7 +69,7 @@ public class ClubService {
         ClubMember leaderMember = club.getMembers().stream()
                 .filter(m -> m.getRole() == MemberRole.LEADER)
                 .findFirst()
-                .orElseThrow(() -> new CustomException(ErrorCode.CLUB_LEADER_NOT_FOUNT));
+                .orElseThrow(() -> new CustomException(ErrorCode.CLUB_LEADER_NOT_FOUND));
 
         // LeaderDto 생성
         LeaderDto leaderDto = LeaderDto.builder()
@@ -98,5 +99,22 @@ public class ClubService {
                 .leader(leaderDto)
                 .members(memberDtos)
                 .build();
+    }
+
+    @Transactional
+    public void updateClub(Long clubId, ClubUpdateRequestDto clubDto ) {
+        Club club = findById(clubId);
+        if( clubDto.getClubName() != null ) club.setClubName( clubDto.getClubName() );
+        if( clubDto.getClubDesc() !=null ) club.setClubDesc(clubDto.getClubDesc() );
+        if( clubDto.getCampus() != null ) club.setCampus(Campus.fromString(clubDto.getCampus()));
+
+        log.info("club:{} - 동아리가 정상적으로 수정되었습니다.", clubId);
+    }
+
+    @Transactional
+    public void deleteClub(Long clubId) {
+        Club club = findById(clubId);
+        clubRepository.delete(club);
+        log.info("club:{} - 동아리가 정상적으로 삭제되었습니다.", clubId);
     }
 }

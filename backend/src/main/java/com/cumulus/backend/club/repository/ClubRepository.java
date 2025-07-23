@@ -49,4 +49,11 @@ public class ClubRepository {
 
         return query.getResultList();
     }
+
+    public void delete(Club club) {
+        if(!em.contains(club)){
+            club = em.merge(club); // 영속상태가 아니면 병합
+        }
+        em.remove(club);
+    }
 }
