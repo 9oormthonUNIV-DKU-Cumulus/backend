@@ -35,15 +35,16 @@ public enum ErrorCode {
     USER_NOT_CLUB_MEMBER(HttpStatus.UNAUTHORIZED, "해당유저는 동아리의 멤버가 아닙니다."),
     USER_NOT_CLUB_LEADER(HttpStatus.UNAUTHORIZED, "해당유저는 동아리의 대표멤버가 아닙니다."),
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 카테고리를 찾을 수 없습니다."),
-    CAMPUS_NOT_FOUNT(HttpStatus.NOT_FOUND, "해당 캠퍼스는 존재하지 않습니다."),
+    CAMPUS_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 캠퍼스는 존재하지 않습니다."),
     ACTIVITY_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 모임을 찾을 수 없습니다."),
     CLUB_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 동아리를 찾을 수 없습니다."),
-    CLUB_LEADER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 동아리의 대표자정보를 찾을 수 없습니다."),
+    CLUB_LEADER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 동아리의 리더정보를 불러올 수 없습니다."),
 
     // 동아리 처리관련
     DUPLICATE_CLUB_APPLICATION(HttpStatus.BAD_REQUEST, "이미 신청한 동아리를 중복신청할 수 없습니다."),
     ALREADY_CLUB_MEMBER(HttpStatus.BAD_REQUEST, "이미 동아리원일 경우 신청할 수 없습니다."),
     INVALID_APPLICATION_STATUS(HttpStatus.BAD_REQUEST, "동아리 신청상태가 처리가능한 PENDING상태가 아닙니다."),
+    NO_PERMISSION_CLUB(HttpStatus.NOT_FOUND, "해당 동아리처리에 대한 권한이 없습니다."),
     NO_PERMISSION_CLUB_APPLICATION(HttpStatus.UNAUTHORIZED,"해당 동아리신청처리에 대한 권한이 없습니다."),
 
     // 모임 처리관련

@@ -12,6 +12,6 @@ public enum Campus {
         return Arrays.stream(values())
                 .filter(v -> v.name().equalsIgnoreCase(value))
                 .findFirst()
-                .orElseThrow(() -> new CustomException(ErrorCode.CAMPUS_NOT_FOUNT));
+                .orElseThrow(() -> new CustomException(ErrorCode.CAMPUS_NOT_FOUND));
     }
 }
