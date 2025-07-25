@@ -4,6 +4,7 @@ import com.cumulus.backend.activity.domain.Activity;
 import com.cumulus.backend.activity.domain.ActivityApplication;
 import com.cumulus.backend.activity.dto.ActivityApplicationCreateRequestDto;
 import com.cumulus.backend.activity.repository.ActivityApplicationRepository;
+import com.cumulus.backend.activity.repository.ActivityRepository;
 import com.cumulus.backend.club.domain.ApplyStatus;
 import com.cumulus.backend.club.domain.ClubMember;
 import com.cumulus.backend.exception.CustomException;

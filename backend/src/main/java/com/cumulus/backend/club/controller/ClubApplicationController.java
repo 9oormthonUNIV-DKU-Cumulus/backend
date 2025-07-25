@@ -1,6 +1,7 @@
 package com.cumulus.backend.club.controller;
 
 import com.cumulus.backend.club.domain.Club;
+import com.cumulus.backend.club.domain.ClubApplication;
 import com.cumulus.backend.club.service.ClubApplicationService;
 import com.cumulus.backend.club.service.ClubService;
 import com.cumulus.backend.common.ApiResponse;
@@ -13,10 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/club")
@@ -43,5 +41,21 @@ public class ClubApplicationController {
         User user = userService.findById(userId);
         clubApplicationService.createClubApplication(club,user);
         return ResponseEntity.ok(ApiResponse.success("동아리 신청 등록되었습니다."));
+    }
+
+    @DeleteMapping("/applications/{applicationId}")
+    @Operation(summary = "동아리신청 취소",
+        description = "마이페이지의 나의 동아리 신청내역 등에서 신청했던 사항을 취소 - 신청한 유저 본인만 취소가능")
+    public ResponseEntity<ApiResponse<?>> deleteApplication(
+            @Parameter(description = "동아리신청Id", required = true) @PathVariable("applicationId") Long applicationId,
+            HttpServletRequest request
+    ){
+        String token = jwtUtil.resolveToken(request);
+        Long userId = jwtUtil.extractUserId(token, false);
+
+        ClubApplication clubApplication = clubApplicationService.findById(applicationId);
+        User user = userService.findById(userId);
+        clubApplicationService.deleteClubApplication(clubApplication,user);
+        return ResponseEntity.ok(ApiResponse.success("동아리 신청 취소(삭제)되었습니다."));
     }
 }

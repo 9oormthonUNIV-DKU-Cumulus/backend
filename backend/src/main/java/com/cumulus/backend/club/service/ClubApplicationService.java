@@ -24,6 +24,11 @@ public class ClubApplicationService {
     private final ClubApplicationRepository clubApplicationRepository;
     private final ClubMemberRepository clubMemberRepository;
 
+    public ClubApplication findById(Long applicationId){
+        return clubApplicationRepository.findOne(applicationId)
+                .orElseThrow(()-> new CustomException(ErrorCode.APPLICATION_NOT_FOUND));
+    }
+
     @Transactional
     public void createClubApplication(Club club, User applicant){
         // 동아리원신청 제어
@@ -50,4 +55,14 @@ public class ClubApplicationService {
         log.info("모임신청 등록완료 - 신청id{}", savedApplication.getId());
     }
 
+    @Transactional
+    public void deleteClubApplication(ClubApplication clubApplication, User user){
+        if(!clubApplication.getUser().equals(user)) {
+            log.error("동아리신청내역 삭제권한 없음");
+            throw new CustomException(ErrorCode.NO_PERMISSION_APPLICATION);
+        }
+
+        clubApplicationRepository.delete(clubApplication);
+        log.info("동아리신청 삭제완료");
+    }
 }

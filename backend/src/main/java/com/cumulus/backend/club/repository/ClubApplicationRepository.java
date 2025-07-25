@@ -9,6 +9,8 @@ import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 @AllArgsConstructor
 public class ClubApplicationRepository {
@@ -31,5 +33,16 @@ public class ClubApplicationRepository {
         } else {
             return em.merge(clubApplication);
         }
+    }
+
+    public Optional<ClubApplication> findOne(Long applicationId) {
+        return Optional.ofNullable(em.find(ClubApplication.class, applicationId));
+    }
+
+    public void delete(ClubApplication clubApplication) {
+        if (!em.contains(clubApplication)) {
+            clubApplication = em.merge(clubApplication);
+        }
+        em.remove(clubApplication);
     }
 }
