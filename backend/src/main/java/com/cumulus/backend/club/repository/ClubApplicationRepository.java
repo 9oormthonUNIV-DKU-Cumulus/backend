@@ -9,6 +9,7 @@ import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -45,4 +46,11 @@ public class ClubApplicationRepository {
         }
         em.remove(clubApplication);
     }
+
+    public List<ClubApplication> findByApplicant(User user) {
+        return em.createQuery("select ca from ClubApplication ca where ca.user = :user", ClubApplication.class)
+                .setParameter("user", user)
+                .getResultList();
+    }
+
 }

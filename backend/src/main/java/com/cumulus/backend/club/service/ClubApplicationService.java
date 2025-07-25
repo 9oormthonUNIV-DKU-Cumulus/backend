@@ -3,6 +3,7 @@ package com.cumulus.backend.club.service;
 import com.cumulus.backend.club.domain.ApplyStatus;
 import com.cumulus.backend.club.domain.Club;
 import com.cumulus.backend.club.domain.ClubApplication;
+import com.cumulus.backend.club.dto.ClubApplicationListByApplicant;
 import com.cumulus.backend.club.repository.ClubApplicationRepository;
 import com.cumulus.backend.club.repository.ClubMemberRepository;
 import com.cumulus.backend.exception.CustomException;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -64,5 +66,11 @@ public class ClubApplicationService {
 
         clubApplicationRepository.delete(clubApplication);
         log.info("동아리신청 삭제완료");
+    }
+
+    public List<ClubApplicationListByApplicant> getApplicationByUser(User user) {
+        return clubApplicationRepository.findByApplicant(user).stream()
+                .map(ClubApplicationListByApplicant::fromEntity)
+                .toList();
     }
 }

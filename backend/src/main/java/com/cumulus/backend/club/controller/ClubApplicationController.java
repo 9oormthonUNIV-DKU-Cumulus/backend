@@ -2,6 +2,7 @@ package com.cumulus.backend.club.controller;
 
 import com.cumulus.backend.club.domain.Club;
 import com.cumulus.backend.club.domain.ClubApplication;
+import com.cumulus.backend.club.dto.ClubApplicationListByApplicant;
 import com.cumulus.backend.club.service.ClubApplicationService;
 import com.cumulus.backend.club.service.ClubService;
 import com.cumulus.backend.common.ApiResponse;
@@ -15,6 +16,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/club")
@@ -57,5 +60,20 @@ public class ClubApplicationController {
         User user = userService.findById(userId);
         clubApplicationService.deleteClubApplication(clubApplication,user);
         return ResponseEntity.ok(ApiResponse.success("동아리 신청 취소(삭제)되었습니다."));
+    }
+
+    @GetMapping("/applications")
+    @Operation(summary = "동아리 신청내역 목록조회(신청자)",
+        description = "마이페이지의 내가 신청한 동아리 신청내역들 확인 - 신청상태확인가능")
+    public ResponseEntity<ApiResponse<?>> getApplications(
+
+            HttpServletRequest request
+    ){
+        String token = jwtUtil.resolveToken(request);
+        Long userId = jwtUtil.extractUserId(token, false);
+
+        User user = userService.findById(userId);
+        List<ClubApplicationListByApplicant> applicationsByApplicant = clubApplicationService.getApplicationByUser(user);
+        return ResponseEntity.ok(ApiResponse.success(applicationsByApplicant));
     }
 }
