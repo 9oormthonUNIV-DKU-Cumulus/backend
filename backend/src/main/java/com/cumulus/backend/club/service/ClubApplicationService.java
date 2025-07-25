@@ -3,6 +3,7 @@ package com.cumulus.backend.club.service;
 import com.cumulus.backend.club.domain.ApplyStatus;
 import com.cumulus.backend.club.domain.Club;
 import com.cumulus.backend.club.domain.ClubApplication;
+import com.cumulus.backend.club.dto.ClubApplicationDetailDto;
 import com.cumulus.backend.club.dto.ClubApplicationListByApplicant;
 import com.cumulus.backend.club.dto.ClubApplicationListByLeader;
 import com.cumulus.backend.club.repository.ClubApplicationRepository;
@@ -59,6 +60,19 @@ public class ClubApplicationService {
 
         ClubApplication savedApplication = clubApplicationRepository.save(clubApplication);
         log.info("모임신청 등록완료 - 신청id{}", savedApplication.getId());
+    }
+
+    public ClubApplicationDetailDto getApplicationDetail(Long ApplicationId){
+        ClubApplication clubApplication = findById(ApplicationId);
+        return ClubApplicationDetailDto.builder()
+                .clubApplicationId(clubApplication.getId())
+                .clubName(clubApplication.getClub().getClubName())
+                .clubDesc(clubApplication.getClub().getClubDesc())
+                .campus(clubApplication.getClub().getCampus().name())
+                .category(clubApplication.getClub().getCategory().name())
+                .createdAt(clubApplication.getCreatedAt())
+                .applicationStatus(clubApplication.getStatus().name())
+                .build();
     }
 
     @Transactional

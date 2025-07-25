@@ -2,6 +2,7 @@ package com.cumulus.backend.club.controller;
 
 import com.cumulus.backend.club.domain.Club;
 import com.cumulus.backend.club.domain.ClubApplication;
+import com.cumulus.backend.club.dto.ClubApplicationDetailDto;
 import com.cumulus.backend.club.dto.ClubApplicationListByApplicant;
 import com.cumulus.backend.club.dto.ClubApplicationListByLeader;
 import com.cumulus.backend.club.service.ClubApplicationService;
@@ -47,22 +48,6 @@ public class ClubApplicationController {
         return ResponseEntity.ok(ApiResponse.success("동아리 신청 등록되었습니다."));
     }
 
-    @DeleteMapping("/applications/{applicationId}")
-    @Operation(summary = "동아리신청 취소",
-        description = "마이페이지의 나의 동아리 신청내역 등에서 신청했던 사항을 취소 - 신청한 유저 본인만 취소가능")
-    public ResponseEntity<ApiResponse<?>> deleteApplication(
-            @Parameter(description = "동아리신청Id", required = true) @PathVariable("applicationId") Long applicationId,
-            HttpServletRequest request
-    ){
-        String token = jwtUtil.resolveToken(request);
-        Long userId = jwtUtil.extractUserId(token, false);
-
-        ClubApplication clubApplication = clubApplicationService.findById(applicationId);
-        User user = userService.findById(userId);
-        clubApplicationService.deleteClubApplication(clubApplication,user);
-        return ResponseEntity.ok(ApiResponse.success("동아리 신청 취소(삭제)되었습니다."));
-    }
-
     @GetMapping("/applications/applicant")
     @Operation(summary = "동아리 신청내역 목록조회(신청자)",
         description = "마이페이지의 내가 신청한 동아리 신청내역들 확인 - 신청상태확인가능")
@@ -91,6 +76,31 @@ public class ClubApplicationController {
         List<ClubApplicationListByLeader> applicationsByLeader
                 = clubApplicationService.getApplicationByLeader(user);
         return ResponseEntity.ok(ApiResponse.success(applicationsByLeader));
+    }
+
+    @GetMapping("/applications/{applicationId}")
+    @Operation(summary = "동아리신청 상세조회", description = "특정 동아리신청내역에 대한 상세조회")
+    public ResponseEntity<ApiResponse<?>> getApplicationDetail(
+            @Parameter(description = "동아리신청Id", required = true) @PathVariable("applicationId") Long applicationId
+    ){
+        ClubApplicationDetailDto applications = clubApplicationService.getApplicationDetail(applicationId);
+        return ResponseEntity.ok(ApiResponse.success(applications));
+    }
+
+    @DeleteMapping("/applications/{applicationId}")
+    @Operation(summary = "동아리신청 취소",
+            description = "마이페이지의 나의 동아리 신청내역 등에서 신청했던 사항을 취소 - 신청한 유저 본인만 취소가능")
+    public ResponseEntity<ApiResponse<?>> deleteApplication(
+            @Parameter(description = "동아리신청Id", required = true) @PathVariable("applicationId") Long applicationId,
+            HttpServletRequest request
+    ){
+        String token = jwtUtil.resolveToken(request);
+        Long userId = jwtUtil.extractUserId(token, false);
+
+        ClubApplication clubApplication = clubApplicationService.findById(applicationId);
+        User user = userService.findById(userId);
+        clubApplicationService.deleteClubApplication(clubApplication,user);
+        return ResponseEntity.ok(ApiResponse.success("동아리 신청 취소(삭제)되었습니다."));
     }
 
 }
