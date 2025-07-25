@@ -4,8 +4,7 @@ import com.cumulus.backend.activity.domain.Activity;
 import com.cumulus.backend.activity.domain.ActivityApplication;
 import com.cumulus.backend.user.domain.User;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +12,9 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ClubMember {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

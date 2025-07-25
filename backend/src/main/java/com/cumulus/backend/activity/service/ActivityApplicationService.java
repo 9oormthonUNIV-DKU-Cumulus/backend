@@ -4,13 +4,9 @@ import com.cumulus.backend.activity.domain.Activity;
 import com.cumulus.backend.activity.domain.ActivityApplication;
 import com.cumulus.backend.activity.dto.ActivityApplicationCreateRequestDto;
 import com.cumulus.backend.activity.repository.ActivityApplicationRepository;
-import com.cumulus.backend.activity.repository.ActivityRepository;
-import com.cumulus.backend.club.domain.ApplyStatus;
 import com.cumulus.backend.club.domain.ClubMember;
 import com.cumulus.backend.exception.CustomException;
 import com.cumulus.backend.exception.ErrorCode;
-import com.cumulus.backend.user.domain.User;
-import com.cumulus.backend.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -58,7 +53,7 @@ public class ActivityApplicationService{
     public List<ActivityApplication> getActivityApplications(Long userId, Long activityId) {
         if(!activityService.isHostingUser(activityId, userId)){
             log.error("모임신청내역 조회권한 없음");
-            throw new CustomException(ErrorCode.NO_PERMISSION_APPLICATION);
+            throw new CustomException(ErrorCode.NO_PERMISSION_ACTIVITY_APPLICATION);
         }
 
         Activity activity = activityService.findById(activityId);
@@ -74,7 +69,7 @@ public class ActivityApplicationService{
 
         if(!application.getApplicant().equals(clubMembership)){
             log.error("모임신청내역 삭제권한 없음");
-            throw new CustomException(ErrorCode.NO_PERMISSION_APPLICATION);
+            throw new CustomException(ErrorCode.NO_PERMISSION_ACTIVITY_APPLICATION);
         }
 
         activityApplicationRepository.delete(application);

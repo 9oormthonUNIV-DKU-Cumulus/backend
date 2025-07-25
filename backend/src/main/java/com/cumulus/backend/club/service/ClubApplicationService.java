@@ -1,8 +1,6 @@
 package com.cumulus.backend.club.service;
 
-import com.cumulus.backend.club.domain.ApplyStatus;
-import com.cumulus.backend.club.domain.Club;
-import com.cumulus.backend.club.domain.ClubApplication;
+import com.cumulus.backend.club.domain.*;
 import com.cumulus.backend.club.dto.ClubApplicationDetailDto;
 import com.cumulus.backend.club.dto.ClubApplicationListByApplicant;
 import com.cumulus.backend.club.dto.ClubApplicationListByLeader;
@@ -30,6 +28,7 @@ public class ClubApplicationService {
     private final ClubApplicationRepository clubApplicationRepository;
     private final ClubMemberRepository clubMemberRepository;
     private final ClubRepository clubRepository;
+    private final ClubMemberService clubMemberService;
 
     public ClubApplication findById(Long applicationId){
         return clubApplicationRepository.findOne(applicationId)
@@ -79,7 +78,7 @@ public class ClubApplicationService {
     public void deleteClubApplication(ClubApplication clubApplication, User user){
         if(!clubApplication.getUser().equals(user)) {
             log.error("동아리신청내역 삭제권한 없음");
-            throw new CustomException(ErrorCode.NO_PERMISSION_APPLICATION);
+            throw new CustomException(ErrorCode.NO_PERMISSION_CLUB_APPLICATION);
         }
 
         clubApplicationRepository.delete(clubApplication);
@@ -100,5 +99,32 @@ public class ClubApplicationService {
         // 해당 클럽들의 신청서 목록조회
         List<ClubApplication> clubApplications = clubApplicationRepository.findByClubs(leadingClubs);
         return clubApplications.stream().map(ClubApplicationListByLeader::fromEntity).toList();
+    }
+
+    @Transactional
+    public void updateApplicationApprove(Long clubApplicationId, Long userId) {
+        ClubApplication clubApplication = findById(clubApplicationId);
+
+        // 승인수행자가 해당 동아리의 리더인지 확인
+        clubMemberService.checkClubLeaderOrThrow(userId, clubApplication.getClub().getId());
+        // 승인상태가 PENDING인지 확인
+        if (clubApplication.getStatus() != ApplyStatus.PENDING) {
+            throw new CustomException(ErrorCode.INVALID_APPLICATION_STATUS);
+        }
+
+        // 신청 승인상태로 변경
+        clubApplication.setStatus(ApplyStatus.APPROVE);
+
+        // 클럽멤버로 등록
+        ClubMember clubMember = ClubMember.builder()
+                .memberName(clubApplication.getUser().getUserName())
+                .profileImgUrl(clubApplication.getUser().getProfileImageUrl())
+                .role(MemberRole.MEMBER)
+                .user(clubApplication.getUser())
+                .club(clubApplication.getClub())
+                .build();
+        ClubMember savedClubMember = clubMemberRepository.save(clubMember);
+        clubApplication.getClub().addMember(savedClubMember);
+        log.info("동아리 신청 승인후 새로운 동아리 멤버 등록 - memberId:{}", savedClubMember.getId());
     }
 }

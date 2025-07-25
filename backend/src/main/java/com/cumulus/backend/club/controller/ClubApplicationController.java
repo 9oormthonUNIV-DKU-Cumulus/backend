@@ -103,4 +103,19 @@ public class ClubApplicationController {
         return ResponseEntity.ok(ApiResponse.success("동아리 신청 취소(삭제)되었습니다."));
     }
 
+    @PostMapping("/applications/{applicationId}/approve")
+    @Operation(summary = "동아리 신청 승인",
+            description = "마이페이지의 내가 개최한 동아리 신청내역들 -> 승인처리(APPROVE) & 신청자 클럽멤버로 등록")
+    public ResponseEntity<ApiResponse<?>> updateApplicationApprove(
+            @Parameter(description = "동아리신청Id", required = true) @PathVariable("applicationId") Long applicationId,
+            HttpServletRequest request
+
+    ){
+        String token = jwtUtil.resolveToken(request);
+        Long userId = jwtUtil.extractUserId(token, false);
+
+        clubApplicationService.updateApplicationApprove(applicationId, userId);
+        return ResponseEntity.ok(ApiResponse.success("동아리 신청 승인처리되었습니다."));
+    }
+
 }
