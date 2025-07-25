@@ -42,6 +42,8 @@ public enum ErrorCode {
 
     ACTIVTIY_FULL(HttpStatus.BAD_REQUEST, "모집인원이 가득찼습니다."),
     DUPLICATE_ACTIVITY_APPLICATION(HttpStatus.BAD_REQUEST, "이미 신청한 모임을 중복신청할 수 없습니다."),
+    DUPLICATE_CLUB_APPLICATION(HttpStatus.BAD_REQUEST, "이미 신청한 동아리를 중복신청할 수 없습니다."),
+    ALREADY_CLUB_MEMBER(HttpStatus.BAD_REQUEST, "이미 동아리원일 경우 신청할 수 없습니다."),
     APPLICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 모임신청을 찾을 수 없습니다."),
     NO_PERMISSION_ACTIVITY(HttpStatus.UNAUTHORIZED, "해당 모임에 대한 권한이 없습니다."),
     NO_PERMISSION_APPLICATION(HttpStatus.UNAUTHORIZED,"해당 모임신청처리에 대한 권한이 없습니다."),

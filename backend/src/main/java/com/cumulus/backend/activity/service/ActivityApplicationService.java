@@ -22,15 +22,16 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional(readOnly = true)
 public class ActivityApplicationService{
 
     private final ActivityApplicationRepository activityApplicationRepository;
     private final ActivityService activityService;
-    private final UserService userService;
 
     @Transactional
     public ActivityApplication createActivityApplication(Activity activity, ClubMember clubMembership,
                                           ActivityApplicationCreateRequestDto applicationCreateDto) {
+        //중복신청제어
         boolean alreadyApplied = activityApplicationRepository
                 .existsByActivityAndApplicant(activity, clubMembership);
         if (alreadyApplied) {

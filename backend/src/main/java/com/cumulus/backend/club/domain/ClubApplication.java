@@ -2,12 +2,15 @@ package com.cumulus.backend.club.domain;
 
 import com.cumulus.backend.user.domain.User;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
 public class ClubApplication {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
