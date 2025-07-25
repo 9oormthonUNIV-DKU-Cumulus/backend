@@ -1,6 +1,5 @@
 package com.cumulus.backend.club.service;
 
-import com.cumulus.backend.activity.dto.ActivityDetailDto;
 import com.cumulus.backend.club.domain.*;
 import com.cumulus.backend.club.dto.*;
 import com.cumulus.backend.club.repository.ClubMemberRepository;
@@ -62,7 +61,7 @@ public class ClubService {
         return club;
     }
 
-    public ClubDetailDto getClub(Long clubId) {
+    public ClubDetailDto getClubDetail(Long clubId) {
         Club club = findById(clubId);
 
         // 멤버 리스트에서 리더 찾기

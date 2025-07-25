@@ -48,7 +48,7 @@ public class ClubController {
     public ResponseEntity<ApiResponse<?>> getClubDetail(
             @Parameter(description = "동아리Id", required = true) @PathVariable("id") Long clubId
     ){
-        ClubDetailDto clubDetailDto = clubService.getClub(clubId);
+        ClubDetailDto clubDetailDto = clubService.getClubDetail(clubId);
         return ResponseEntity.ok(ApiResponse.success(clubDetailDto));
     }
 

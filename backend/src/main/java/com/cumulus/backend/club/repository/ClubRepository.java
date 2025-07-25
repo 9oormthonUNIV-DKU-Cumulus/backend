@@ -3,6 +3,7 @@ package com.cumulus.backend.club.repository;
 import com.cumulus.backend.club.domain.Campus;
 import com.cumulus.backend.club.domain.Category;
 import com.cumulus.backend.club.domain.Club;
+import com.cumulus.backend.user.domain.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
@@ -56,4 +57,12 @@ public class ClubRepository {
         }
         em.remove(club);
     }
+
+    public List<Club> findClubsByLeaderUser(User user) {
+        return em.createQuery("select cm.club from ClubMember cm " +
+                        "where cm.user = :user and cm.role = com.cumulus.backend.club.domain.MemberRole.LEADER", Club.class)
+                .setParameter("user", user)
+                .getResultList();
+    }
+
 }

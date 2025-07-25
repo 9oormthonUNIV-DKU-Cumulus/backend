@@ -1,9 +1,7 @@
 package com.cumulus.backend.club.repository;
 
-import com.cumulus.backend.activity.domain.Activity;
 import com.cumulus.backend.club.domain.Club;
 import com.cumulus.backend.club.domain.ClubApplication;
-import com.cumulus.backend.club.domain.ClubMember;
 import com.cumulus.backend.user.domain.User;
 import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
@@ -53,4 +51,10 @@ public class ClubApplicationRepository {
                 .getResultList();
     }
 
+    public List<ClubApplication> findByClubs(List<Club> clubs) {
+        return em.createQuery("select ca from ClubApplication ca where ca.club in :clubs and ca.status = 'PENDING'",
+                        ClubApplication.class)
+                .setParameter("clubs", clubs)
+                .getResultList();
+    }
 }

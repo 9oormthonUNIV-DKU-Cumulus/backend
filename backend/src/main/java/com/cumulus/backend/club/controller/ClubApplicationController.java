@@ -3,6 +3,7 @@ package com.cumulus.backend.club.controller;
 import com.cumulus.backend.club.domain.Club;
 import com.cumulus.backend.club.domain.ClubApplication;
 import com.cumulus.backend.club.dto.ClubApplicationListByApplicant;
+import com.cumulus.backend.club.dto.ClubApplicationListByLeader;
 import com.cumulus.backend.club.service.ClubApplicationService;
 import com.cumulus.backend.club.service.ClubService;
 import com.cumulus.backend.common.ApiResponse;
@@ -62,18 +63,34 @@ public class ClubApplicationController {
         return ResponseEntity.ok(ApiResponse.success("동아리 신청 취소(삭제)되었습니다."));
     }
 
-    @GetMapping("/applications")
+    @GetMapping("/applications/applicant")
     @Operation(summary = "동아리 신청내역 목록조회(신청자)",
         description = "마이페이지의 내가 신청한 동아리 신청내역들 확인 - 신청상태확인가능")
-    public ResponseEntity<ApiResponse<?>> getApplications(
-
+    public ResponseEntity<ApiResponse<?>> getApplicationsByApplicant(
             HttpServletRequest request
     ){
         String token = jwtUtil.resolveToken(request);
         Long userId = jwtUtil.extractUserId(token, false);
 
         User user = userService.findById(userId);
-        List<ClubApplicationListByApplicant> applicationsByApplicant = clubApplicationService.getApplicationByUser(user);
+        List<ClubApplicationListByApplicant> applicationsByApplicant
+                = clubApplicationService.getApplicationByApplicant(user);
         return ResponseEntity.ok(ApiResponse.success(applicationsByApplicant));
     }
+
+    @GetMapping("/applicants/leader")
+    @Operation(summary = "동아리 신청내역 목록조회(개최자)",
+        description = "마이페이지의 내가 개최한 동아리 신청내역들 확인(승인이전 PENDING상태만) -> 추후 신청 승인,거절 여부 선택가능")
+    public ResponseEntity<ApiResponse<?>> getApplicationsByLeader(
+            HttpServletRequest request
+    ){
+        String token = jwtUtil.resolveToken(request);
+        Long userId = jwtUtil.extractUserId(token, false);
+
+        User user = userService.findById(userId);
+        List<ClubApplicationListByLeader> applicationsByLeader
+                = clubApplicationService.getApplicationByLeader(user);
+        return ResponseEntity.ok(ApiResponse.success(applicationsByLeader));
+    }
+
 }

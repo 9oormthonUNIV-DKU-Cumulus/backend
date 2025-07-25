@@ -4,8 +4,10 @@ import com.cumulus.backend.club.domain.ApplyStatus;
 import com.cumulus.backend.club.domain.Club;
 import com.cumulus.backend.club.domain.ClubApplication;
 import com.cumulus.backend.club.dto.ClubApplicationListByApplicant;
+import com.cumulus.backend.club.dto.ClubApplicationListByLeader;
 import com.cumulus.backend.club.repository.ClubApplicationRepository;
 import com.cumulus.backend.club.repository.ClubMemberRepository;
+import com.cumulus.backend.club.repository.ClubRepository;
 import com.cumulus.backend.exception.CustomException;
 import com.cumulus.backend.exception.ErrorCode;
 import com.cumulus.backend.user.domain.User;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -25,6 +28,7 @@ public class ClubApplicationService {
 
     private final ClubApplicationRepository clubApplicationRepository;
     private final ClubMemberRepository clubMemberRepository;
+    private final ClubRepository clubRepository;
 
     public ClubApplication findById(Long applicationId){
         return clubApplicationRepository.findOne(applicationId)
@@ -68,9 +72,19 @@ public class ClubApplicationService {
         log.info("동아리신청 삭제완료");
     }
 
-    public List<ClubApplicationListByApplicant> getApplicationByUser(User user) {
+    public List<ClubApplicationListByApplicant> getApplicationByApplicant(User user) {
         return clubApplicationRepository.findByApplicant(user).stream()
                 .map(ClubApplicationListByApplicant::fromEntity)
                 .toList();
+    }
+
+    public List<ClubApplicationListByLeader> getApplicationByLeader(User user) {
+        // 리더로 있는 Club리스트 조회
+        List<Club> leadingClubs = clubRepository.findClubsByLeaderUser(user);
+        if (leadingClubs.isEmpty()) return Collections.emptyList();
+
+        // 해당 클럽들의 신청서 목록조회
+        List<ClubApplication> clubApplications = clubApplicationRepository.findByClubs(leadingClubs);
+        return clubApplications.stream().map(ClubApplicationListByLeader::fromEntity).toList();
     }
 }
