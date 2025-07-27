@@ -5,6 +5,7 @@ import com.cumulus.backend.activity.domain.ActivityApplication;
 import com.cumulus.backend.activity.dto.*;
 import com.cumulus.backend.activity.repository.ActivityApplicationRepository;
 import com.cumulus.backend.activity.repository.ActivityRepository;
+import com.cumulus.backend.club.domain.Club;
 import com.cumulus.backend.club.domain.ClubMember;
 import com.cumulus.backend.club.repository.ClubMemberRepository;
 import com.cumulus.backend.exception.CustomException;
@@ -150,9 +151,19 @@ public class ActivityService {
         return activityDtos;
     }
 
-    public boolean isHostingUser(Long activityId, Long userId) {
+    public boolean checkActivtiyHostingUser(Long activityId, Long userId) {
         Activity activity = findById(activityId);
         Long hostingUserId = activity.getHostingUser().getUser().getId(); // ClubMember → User → ID
         return hostingUserId.equals(userId);
+    }
+
+    public ActivityListDto getClubActivityList(Club club) {
+        List<Activity> activities = activityRepository.findByClub(club);
+
+        List<ActivityDetailDto> activityDtos = activities.stream()
+                .map(ActivityDetailDto::fromEntityWithoutDescription)
+                .collect(Collectors.toList());
+
+        return new ActivityListDto(activityDtos);
     }
 }

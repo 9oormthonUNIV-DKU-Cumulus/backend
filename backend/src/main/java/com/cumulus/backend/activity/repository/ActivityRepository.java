@@ -1,6 +1,7 @@
 package com.cumulus.backend.activity.repository;
 
 import com.cumulus.backend.activity.domain.Activity;
+import com.cumulus.backend.club.domain.Club;
 import com.cumulus.backend.club.domain.ClubMember;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -56,6 +57,12 @@ public class ActivityRepository {
     public List<Activity> findByHostingUser(ClubMember clubMember) {
         return em.createQuery("select a from Activity a where a.hostingUser =: hostingUser", Activity.class)
                 .setParameter("hostingUser", clubMember)
+                .getResultList();
+    }
+
+    public List<Activity> findByClub(Club club) {
+        return em.createQuery("select a from Activity a where a.club = :club", Activity.class)
+                .setParameter("club", club)
                 .getResultList();
     }
 }

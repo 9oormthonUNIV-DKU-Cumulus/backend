@@ -51,7 +51,7 @@ public class ActivityApplicationService{
     }
 
     public List<ActivityApplication> getActivityApplications(Long userId, Long activityId) {
-        if(!activityService.isHostingUser(activityId, userId)){
+        if(!activityService.checkActivtiyHostingUser(activityId, userId)){
             log.error("모임신청내역 조회권한 없음");
             throw new CustomException(ErrorCode.NO_PERMISSION_ACTIVITY_APPLICATION);
         }
