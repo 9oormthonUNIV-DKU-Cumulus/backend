@@ -128,6 +128,7 @@ public class ClubApplicationService {
         log.info("동아리 신청 승인후 새로운 동아리 멤버 등록 - memberId:{}", savedClubMember.getId());
     }
 
+    @Transactional
     public void updateApplicationReject(Long applicationId, Long userId) {
         ClubApplication clubApplication = findById(applicationId);
 
