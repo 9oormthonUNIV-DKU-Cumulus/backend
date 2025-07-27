@@ -127,4 +127,19 @@ public class ClubApplicationService {
         clubApplication.getClub().addMember(savedClubMember);
         log.info("동아리 신청 승인후 새로운 동아리 멤버 등록 - memberId:{}", savedClubMember.getId());
     }
+
+    public void updateApplicationReject(Long applicationId, Long userId) {
+        ClubApplication clubApplication = findById(applicationId);
+
+        // 승인수행자가 해당 동아리의 리더인지 확인
+        clubMemberService.checkClubLeaderOrThrow(userId, clubApplication.getClub().getId());
+        // 승인상태가 PENDING인지 확인
+        if (clubApplication.getStatus() != ApplyStatus.PENDING) {
+            throw new CustomException(ErrorCode.INVALID_APPLICATION_STATUS);
+        }
+
+        // 승인 거부상태로 변경
+        clubApplication.setStatus(ApplyStatus.REJECT);
+        log.info("동아리 신청 거부처리 완료");
+    }
 }
