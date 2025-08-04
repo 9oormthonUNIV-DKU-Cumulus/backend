@@ -43,9 +43,14 @@ public class LikeService {
         return likeRepository.existsByUserIdAndClubId(userId, clubId);
     }
 
+    @Transactional
     public void deleteClubLike(Long userId, Long clubId) {
         Like clubLike = likeRepository.findByUserAndClub(userId, clubId)
                 .orElseThrow(() -> new CustomException(ErrorCode.LIKE_NOT_FOUND));
         likeRepository.delete(clubLike);
+    }
+
+    public boolean checkActivityLike(Long userId, Long activityId) {
+        return likeRepository.existsByUserIdAndActivityId(userId, activityId);
     }
 }

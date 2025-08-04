@@ -25,7 +25,7 @@ public class LikeController {
 
     @GetMapping("club/{id}")
     @Operation(summary = "동아리 좋아요 여부 확인",
-            description = "해당 유저가 동아리에 좋아요를 등록했는지 확인합니다. 프론트에서 이거 호출해서 좋아요 등록된 상태면 취소 / 등록되지 않은 상태면 등록하세요")
+            description = "해당 유저가 동아리에 좋아요를 등록했는지 확인합니다.(true/false값) 프론트에서 이거 호출해서 좋아요 등록된 상태면 취소 / 등록되지 않은 상태면 등록하세요")
     public ResponseEntity<ApiResponse<?>> checkClubLike(
             @Parameter(description = "동아리Id", required = true) @PathVariable("id") Long clubId,
             HttpServletRequest request
@@ -33,8 +33,8 @@ public class LikeController {
         String token = jwtUtil.resolveToken(request);
         Long userId = jwtUtil.extractUserId(token, false);
 
-        boolean clubLike = likeService.checkClubLike(userId, clubId);
-        return ResponseEntity.ok(ApiResponse.success(clubLike));
+        boolean isClubLiked = likeService.checkClubLike(userId, clubId);
+        return ResponseEntity.ok(ApiResponse.success(isClubLiked));
     }
 
     @PostMapping("club/{id}")
@@ -63,5 +63,19 @@ public class LikeController {
         likeService.deleteClubLike(userId, clubId);
         log.info("동아리 좋아요 삭제요청 완료되었습니다.");
         return ResponseEntity.ok(ApiResponse.success("동아리 좋아요 삭제했습니다."));
+    }
+
+    @GetMapping("activity/{id}")
+    @Operation(summary = "모임글 좋아요 여부 확인",
+            description = "해당 유저가 모임글에 좋아요를 등록했는지 확인합니다.(true/false값) 프론트에서 이거 호출해서 좋아요 등록된 상태면 취소 / 등록되지 않은 상태면 등록하세요")
+    public ResponseEntity<ApiResponse<?>> checkActivityLike(
+            @Parameter(description = "모임글Id", required = true) @PathVariable("id") Long activityId,
+            HttpServletRequest request
+    ){
+        String token = jwtUtil.resolveToken(request);
+        Long userId = jwtUtil.extractUserId(token, false);
+
+        boolean isActivityLiked = likeService.checkActivityLike(userId, activityId);
+        return ResponseEntity.ok(ApiResponse.success(isActivityLiked));
     }
 }

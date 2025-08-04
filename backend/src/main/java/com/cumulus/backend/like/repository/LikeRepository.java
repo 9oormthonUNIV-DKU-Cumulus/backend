@@ -46,4 +46,12 @@ public class LikeRepository {
         }
         em.remove(like);
     }
+
+    public boolean existsByUserIdAndActivityId(Long userId, Long activityId) {
+        String jpql = "SELECT count(l) > 0 FROM Like l WHERE l.user.id = :userId AND l.activity.id = :activityId";
+        return em.createQuery(jpql, Boolean.class)
+                .setParameter("userId", userId)
+                .setParameter("activityId", activityId)
+                .getSingleResult();
+    }
 }
