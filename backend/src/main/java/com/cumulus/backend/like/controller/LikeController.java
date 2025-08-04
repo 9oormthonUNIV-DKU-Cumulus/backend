@@ -78,4 +78,19 @@ public class LikeController {
         boolean isActivityLiked = likeService.checkActivityLike(userId, activityId);
         return ResponseEntity.ok(ApiResponse.success(isActivityLiked));
     }
+
+    @PostMapping("activity/{id}")
+    @Operation(summary = "모임글 좋아요 등록", description = "해당 유저가 모임글에 좋아요를 등록합니다.")
+    public ResponseEntity<ApiResponse<?>> createActivityLike(
+            @Parameter(description = "모임글Id", required = true) @PathVariable("id") Long activityId,
+            HttpServletRequest request
+    ){
+        String token = jwtUtil.resolveToken(request);
+        Long userId = jwtUtil.extractUserId(token, false);
+
+        Like activityLike = likeService.createActivityLike(userId, activityId);
+        log.info("모임글({}) 좋아요 등록합니다 - 좋아요 등록번호 : {}", activityId, activityLike.getId() );
+        return ResponseEntity.ok(ApiResponse.success("모임글 좋아요 등록했습니다."));
+    }
+
 }

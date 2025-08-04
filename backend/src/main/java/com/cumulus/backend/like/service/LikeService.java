@@ -53,4 +53,18 @@ public class LikeService {
     public boolean checkActivityLike(Long userId, Long activityId) {
         return likeRepository.existsByUserIdAndActivityId(userId, activityId);
     }
+
+    public Like createActivityLike(Long userId, Long activityId) {
+        User user = userService.findById(userId);
+        Activity activity = activityService.findById(activityId);
+
+        Like like = Like.builder()
+                .user(user)
+                .club(null)
+                .activity(activity)
+                .build();
+        like.validateTarget();
+
+        return likeRepository.save(like);
+    }
 }
