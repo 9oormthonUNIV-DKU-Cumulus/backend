@@ -42,4 +42,10 @@ public class LikeService {
     public boolean checkClubLike(Long userId, Long clubId){
         return likeRepository.existsByUserIdAndClubId(userId, clubId);
     }
+
+    public void deleteClubLike(Long userId, Long clubId) {
+        Like clubLike = likeRepository.findByUserAndClub(userId, clubId)
+                .orElseThrow(() -> new CustomException(ErrorCode.LIKE_NOT_FOUND));
+        likeRepository.delete(clubLike);
+    }
 }

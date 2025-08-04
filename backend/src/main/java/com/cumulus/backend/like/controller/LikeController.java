@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/like")
-@Tag(name = "좋아요")
+@Tag(name = "좋아요 기능")
 @Slf4j
 public class LikeController {
 
@@ -49,5 +49,19 @@ public class LikeController {
         Like clubLike = likeService.createClubLike(userId, clubId);
         log.info("동아리({}) 좋아요 등록합니다 - 좋아요 등록번호 : {}", clubId, clubLike.getId() );
         return ResponseEntity.ok(ApiResponse.success("동아리 좋아요 등록했습니다."));
+    }
+
+    @PostMapping("club/{id}")
+    @Operation(summary = "동아리 좋아요 등록취소(삭제)", description = "해당 유저가 동아리에 등록한 좋아요를 취소(삭제)합니다.")
+    public ResponseEntity<ApiResponse<?>> deleteClubLike(
+            @Parameter(description = "동아리Id", required = true) @PathVariable("id") Long clubId,
+            HttpServletRequest request
+    ){
+        String token = jwtUtil.resolveToken(request);
+        Long userId = jwtUtil.extractUserId(token, false);
+
+        likeService.deleteClubLike(userId, clubId);
+        log.info("동아리 좋아요 삭제요청 완료되었습니다.");
+        return ResponseEntity.ok(ApiResponse.success("동아리 좋아요 삭제했습니다."));
     }
 }

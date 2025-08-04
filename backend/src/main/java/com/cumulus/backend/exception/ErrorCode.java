@@ -59,7 +59,10 @@ public enum ErrorCode {
     EMAIL_VERIFICATION_CODE_INVALID(HttpStatus.BAD_REQUEST, "이메일 인증 코드가 일치하지 않습니다."),
     EMAIL_VERIFICATION_CODE_EXPIRED(HttpStatus.BAD_REQUEST, "인증 코드가 만료되었습니다."),
     EMAIL_NOT_VERIFIED(HttpStatus.BAD_REQUEST, "이메일코드 인증이 완료되지 않았습니다." ),
-    LIKE_ERROR(HttpStatus.BAD_REQUEST, "Like는 club 또는 activity 중 하나에만 연결되어야 합니다."),
+
+    // 좋아요 처리 관련 에러
+    LIKE_ERROR(HttpStatus.BAD_REQUEST, "좋아요의 등록은 club 또는 activity 중 하나에만 연결되어야 합니다."),
+    LIKE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 좋아요 내역을 찾을 수 없습니다."),
 
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버내부 문제가 발생했습니다." )
     ;
