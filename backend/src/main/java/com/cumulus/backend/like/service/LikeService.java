@@ -39,5 +39,7 @@ public class LikeService {
         return likeRepository.save(like);
     }
 
-
+    public boolean checkClubLike(Long userId, Long clubId){
+        return likeRepository.existsByUserIdAndClubId(userId, clubId);
+    }
 }

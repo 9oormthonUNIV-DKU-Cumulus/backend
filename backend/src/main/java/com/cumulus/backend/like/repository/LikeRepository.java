@@ -22,11 +22,11 @@ public class LikeRepository {
         }
     }
 
-    public boolean existsByUserAndClub(User user, Club club) {
-        String jpql = "SELECT count(l) > 0 FROM Like l WHERE l.user = :user AND l.club = :club";
+    public boolean existsByUserIdAndClubId(Long userId, Long clubId) {
+        String jpql = "SELECT count(l) > 0 FROM Like l WHERE l.user.id = :userId AND l.club.id = :clubId";
         return em.createQuery(jpql, Boolean.class)
-                .setParameter("user", user)
-                .setParameter("club", club)
+                .setParameter("userId", userId)
+                .setParameter("clubId", clubId)
                 .getSingleResult();
     }
 }
