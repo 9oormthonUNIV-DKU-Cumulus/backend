@@ -51,7 +51,7 @@ public class LikeController {
         return ResponseEntity.ok(ApiResponse.success("동아리 좋아요 등록했습니다."));
     }
 
-    @PostMapping("club/{id}")
+    @DeleteMapping("club/{id}")
     @Operation(summary = "동아리 좋아요 등록취소(삭제)", description = "해당 유저가 동아리에 등록한 좋아요를 취소(삭제)합니다.")
     public ResponseEntity<ApiResponse<?>> deleteClubLike(
             @Parameter(description = "동아리Id", required = true) @PathVariable("id") Long clubId,
@@ -92,5 +92,21 @@ public class LikeController {
         log.info("모임글({}) 좋아요 등록합니다 - 좋아요 등록번호 : {}", activityId, activityLike.getId() );
         return ResponseEntity.ok(ApiResponse.success("모임글 좋아요 등록했습니다."));
     }
+
+    @DeleteMapping("activity/{id}")
+    @Operation(summary = "모임글 좋아요 등록취소(삭제)", description = "해당 유저가 모임글에 등록한 좋아요를 취소(삭제)합니다.")
+    public ResponseEntity<ApiResponse<?>> deleteActivityLike(
+            @Parameter(description = "모임글Id", required = true) @PathVariable("id") Long activityId,
+            HttpServletRequest request
+    ){
+        String token = jwtUtil.resolveToken(request);
+        Long userId = jwtUtil.extractUserId(token, false);
+
+        likeService.deleteActivityLike(userId, activityId);
+        log.info("모임글 좋아요 삭제요청 완료되었습니다.");
+        return ResponseEntity.ok(ApiResponse.success("모임글 좋아요 삭제했습니다."));
+    }
+
+
 
 }

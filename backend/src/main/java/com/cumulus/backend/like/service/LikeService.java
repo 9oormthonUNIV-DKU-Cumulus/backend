@@ -67,4 +67,11 @@ public class LikeService {
 
         return likeRepository.save(like);
     }
+
+    @Transactional
+    public void deleteActivityLike(Long userId, Long activityId) {
+        Like activityLike = likeRepository.findByUserAndActivity(userId, activityId)
+                .orElseThrow(() -> new CustomException(ErrorCode.LIKE_NOT_FOUND));
+        likeRepository.delete(activityLike);
+    }
 }

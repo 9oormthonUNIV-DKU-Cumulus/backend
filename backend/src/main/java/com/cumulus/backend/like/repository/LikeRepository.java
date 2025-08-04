@@ -54,4 +54,12 @@ public class LikeRepository {
                 .setParameter("activityId", activityId)
                 .getSingleResult();
     }
+
+    public Optional<Like> findByUserAndActivity(Long userId, Long activityId) {
+        String jpql = "SELECT like FROM Like like WHERE like.user.id = :userId AND like.activity.id = :activityId";
+        return em.createQuery(jpql, Like.class)
+                .setParameter("userId", userId)
+                .setParameter("activityId", activityId)
+                .getResultList().stream().findFirst();
+    }
 }
